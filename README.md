@@ -332,3 +332,7 @@ template: times.html // 전달받은 context의 값들을 알맞게 표시한다
 
 
 
+https://docs.djangoproject.com/ko/2.2/ref/templates/language/
+
+
+
