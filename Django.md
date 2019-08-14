@@ -293,3 +293,42 @@ templates folder을 생성해서 앞으로 코드를 작성할 예정
 2) view.py에서 만들고자 하는함수로 페이지 생성
 
 3) templates를 만든다 -> 해당 폴더에서 html을 작성
+
+
+
+
+
+#### 실습
+
+url: image/
+
+view:
+
+```python
+def image(request):
+	# image url을 context에 담아서 image.html에 전달
+```
+
+template: image.html // 전달받은 image 을 img태그 src속성에 담아서 랜덤이미지를 보여준다.
+
+
+
+
+
+url: times/
+
+- variable routing으로 숫자 2개를 각각 int타입으로 num1, num2이름으로 받는다.
+
+view:
+
+```python
+def times(request, num1, num2):
+    # 두 숫자를 곱한 result 변수와 num1, num2를 context에 담아서 times.html에 전달
+```
+
+template: times.html // 전달받은 context의 값들을 알맞게 표시한다.
+
+
+
+
+
