@@ -41,12 +41,17 @@ v : view 중간 관리자
 ```bash
 # 파이썬 버전 확인
 # 반드시 3.7.x 버전이 맞는지 확인 후 진행
+student@M702 MINGW64 ~/development/homeworkshop/django (master)
+$ venv
+(3.7.4)
+
 student@M702 MINGW64 ~/development/django/django_intro (master)
 $ python -V
 Python 3.7.4
 (3.7.4)
 
 # 가상환경 생성
+# -m (module의 약자)
 # python -m venv < 가상환경 설치 경로 >
 student@M702 MINGW64 ~/development/django/django_intro (master)
 $ python -m venv venv
@@ -195,6 +200,25 @@ TIME_ZONE = 'Asia/Seoul'
 
 
 
+```html
+# settings.json에 추가!
+
+Configure you file association for Django HTML in the Language Mode menu or drop this in your settings for more precision:
+
+"files.associations": {
+    "**/templates/*.html": "django-html",
+    "**/templates/*": "django-txt",
+    "**/requirements{/**,*}.{txt,in}": "pip-requirements"
+},
+
+
+Emmet enthusiasts should have this to their configuration as well:
+
+"emmet.includeLanguages": {"django-html": "html"},
+
+"[django-html]": {"editor.tabsize": 2},
+```
+
 ---
 
 #### APP 생성
@@ -259,7 +283,7 @@ tests.py 테스트 코드 파일들 존재
 
 settings.py
 
-위에서 부터 인식을 한다.
+위에서 부터 인식을 한다. **! 중요**
 
 ```python
 # Application definition
@@ -282,7 +306,19 @@ INSTALLED_APPS = [
 
 
 
-templates folder을 생성해서 앞으로 코드를 작성할 예정
+프로젝트내의 urls.py에서
+
+from <app 이름> import views
+
+을 선언 후, url을 연결해준다.
+
+
+
+그후 views에서 작성
+
+
+
+templates folder을 생성해서 앞으로 html 작성
 
 
 
@@ -327,10 +363,6 @@ def times(request, num1, num2):
 ```
 
 template: times.html // 전달받은 context의 값들을 알맞게 표시한다.
-
-
-
-
 
 https://docs.djangoproject.com/ko/2.2/ref/templates/language/
 
