@@ -1,3 +1,5 @@
+[TOC]
+
 ## Django
 
 MDN web docs
@@ -30,9 +32,9 @@ v : view 중간 관리자
 
 
 
-## Django Setting
+### Django Setting
 
-### 가상환경
+#### 가상환경
 
 새로운 장고 생성
 
@@ -375,7 +377,8 @@ https://docs.djangoproject.com/ko/2.2/ref/templates/language/
 ---
 
 https://docs.djangoproject.com/en/2.2/ref/templates/builtins/#for
-DTL Django template language
+
+### DTL Django template language
 
 
 
@@ -447,8 +450,6 @@ DTL Django template language
 {% endif %}
 {% endfor %}
 ```
-
-
 
 
 
@@ -530,4 +531,85 @@ https://github.com/dbrgn/django-mathfilters
 ```html
 <p>{{ "google.com"|urlize }}</p>
 ```
+
+
+
+
+
+---
+
+#### 실습
+
+is it birthday?
+
+생일날짜랑 현재날짜를 비교해서
+
+예, 아니요를 나오도록
+
+
+
+isitbirthday/로 접속시 오늘 날짜와 본인 생일이 같다면 `예` 아니라면 `아니요`를 출력하는 페이지 구성
+
+urls.py
+
+```python
+urlpatterns = [
+    # path('사용자가 접속하는 경로')
+    path('isitbirthday/<str:mybd>/', views.isitbirthday),
+]
+
+```
+
+views.py
+
+```python
+def isitbirthday(request, mybd):
+    dt = datetime.now()
+    dt_new = dt.strftime('%m-%d')
+    todaymonth = dt.strftime('%m')
+    todayday = dt.strftime('%d')
+
+    res = 'True'
+    if dt_new != mybd:
+        res = 'False'
+    
+    context = {
+        'mybd': mybd,
+        'dt_new': dt_new,
+        'res': res,
+        'todaymonth': todaymonth,
+        'todayday': todayday,
+    }
+    return render(request, 'isitbirthday.html', context)
+```
+
+template.html
+
+```html
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  {% comment %} isitbithday {% endcomment %}
+
+  {% if res == 'True' %}
+  <p>예! 생일 축하합니다! </p>
+  {% else %}
+  <p>아니요. 오늘은 {{ todaymonth }}월 {{ todayday }}일 입니다! </p>
+  {% endif %}
+
+</body>
+</html>
+```
+
+
+
+
+
+
 

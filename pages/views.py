@@ -60,3 +60,41 @@ def template_language(request):
         'datetimenow': datetimenow,
     }
     return render(request, 'template_language.html', context)
+
+def isitbirthday(request, mybd):
+    dt = datetime.now()
+    dt_new = dt.strftime('%m-%d')
+    todaymonth = dt.strftime('%m')
+    todayday = dt.strftime('%d')
+
+    res = 'True'
+    if dt_new != mybd:
+        res = 'False'
+    
+    context = {
+        'mybd': mybd,
+        'dt_new': dt_new,
+        'res': res,
+        'todaymonth': todaymonth,
+        'todayday': todayday,
+    }
+    return render(request, 'isitbirthday.html', context)
+
+def isitbirthday2(request, mybd):
+    # today = datetime.now()
+
+    context = {
+        'mybd': mybd
+    }
+    return render(request, 'isitbirthday2.html', context)
+
+
+def lotto(request):
+    real_lotto = [21, 25, 30, 32, 40, 42] # 870회차로또 번호
+    luckynumbers = random.sample(range(1,46), 6)
+
+    context = {
+        'real_lotto': real_lotto,
+        'luckynumbers': luckynumbers,
+    }
+    return render(request, 'lotto.html', context)

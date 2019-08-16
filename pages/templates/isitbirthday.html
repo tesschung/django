@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  {% comment %} isitbithday {% endcomment %}
+
+  {% if res == 'True' %}
+  <p>예! 생일 축하합니다! </p>
+  {% else %}
+  <p>아니요. 오늘은 {{ todaymonth }}월 {{ todayday }}일 입니다! </p>
+  {% endif %}
+
+</body>
+</html>
