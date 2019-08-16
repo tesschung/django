@@ -701,3 +701,40 @@ result.html
 </html>
 ```
 
+
+
+
+
+image는 application에 **static** folder를 생성해서 사용하고싶은 image를 보관한다.
+
+.html에 {% load static %} 을 반드시 표시한다.
+
+주소가 있어야 참조가 가능하기 때문이다.
+
+```html
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="{% static 'stylesheets/example.css' %}">
+  <title>Document</title>
+</head>
+<body>
+<h1>STATIC 파일실습</h1>
+<p>static_example입니다.</p>
+{% comment %} 다른 컴퓨터에서도 접속 가능 {% endcomment %}
+<img src="{% static 'images/cat.jpg' %}" alt="cat">
+{% comment %} 아래는 다른 컴퓨터에서 접속시 접속 불가능 {% endcomment %}
+<img src="../static/images/cat.jpg" alt="cat">
+</body>
+</html>
+```
+
+
+
+
+
