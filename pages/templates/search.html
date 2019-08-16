@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<style>
+input {
+  display: inline-block;
+  width: 170px;
+}
+</style>
+<body>
+{% comment %} / = 앞에서 result / = 으로 보내겠다. {% endcomment %}
+{% comment %} action에서 끝에 '/' 을 꼭! 붙여야 한다. {% endcomment %}
+  <form action="/result/"> 
+    category: <input type="text" name="category"><br>
+    search:   <input type="text" name="query" placeholder="input your search keywords">
+    <button type="submit">검색</button>
+  </form>
+</body>
+
+</html>

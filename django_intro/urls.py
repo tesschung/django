@@ -22,6 +22,12 @@ from pages import views # pages라는 application에서 views를 import한다.
 # www.ssafy.com/index => views.index
 urlpatterns = [
     # path('사용자가 접속하는 경로')
+    path('lotto_result/', views.lotto_result),
+    path('user_lotto_number/', views.user_lotto_number),
+
+    path('result/', views.result),
+    path('search/', views.search),
+
     path('lotto/', views.lotto),
     path('isitbirthday2/<str:mybd>/', views.isitbirthday2),
     path('isitbirthday/<str:mybd>/', views.isitbirthday),

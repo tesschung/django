@@ -10,11 +10,12 @@
 
 <p>870회차 로또 번호는 {{ real_lotto }}입니다.</p>
 <p>랜덤으로 뽑힌 번호는 {{ luckynumbers }}입니다.</p>
+<hr>
 
 {% for num in luckynumbers %}
 <p>{{ num }}번</p>
 {% endfor %}
-
+<hr>
 
 {% if real_lotto == luckynumbers %}
 <p>당첨</p>

@@ -611,5 +611,93 @@ template.html
 
 
 
+### Form
 
+사용자와 상호작용하는 APPLICATION
+
+form tag 설문지 ! 중요
+
+input tag - radio, -checkbox, -password, -email
+
+action property
+
+button tag
+
+
+
+
+
+urls.py
+
+```python
+urlpatterns = [
+    path('result/', views.result),
+    path('search/', views.search),
+    ]
+```
+
+views.py
+
+```python
+def search(request):
+    return render(request, 'search.html')
+
+def result(request):
+    query = request.GET.get('query')
+    category = request.GET.get('category')
+    context = {
+        'query': query,
+        'category': category,
+    } 
+    return render(request, 'result.html', context)
+```
+
+search.html
+
+```html
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<style>
+input {
+  display: inline-block;
+  width: 170px;
+}
+</style>
+<body>
+{% comment %} / = 앞에서 result / = 으로 보내겠다. {% endcomment %}
+{% comment %} action에서 끝에 '/' 을 꼭! 붙여야 한다. {% endcomment %}
+  <form action="/result/"> 
+    category: <input type="text" name="category"><br>
+    search:   <input type="text" name="query" placeholder="input your search keywords">
+    <button type="submit">검색</button>
+  </form>
+</body>
+
+</html>
+```
+
+result.html
+
+```html
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>result</title>
+</head>
+<body> 
+  <h1>검색 결과입니다.</h1>
+  <h1>category: {{ category }}</h1>
+  <h1>search: {{ query }}</h1>
+</body>
+</html>
+```
 
