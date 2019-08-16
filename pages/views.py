@@ -58,9 +58,5 @@ def template_language(request):
         'messages': messages,
         'empty_list': empty_list,
         'datetimenow': datetimenow,
-        'dict': {
-            'num1': num1,
-            'num2': num2,
-        }
     }
     return render(request, 'template_language.html', context)

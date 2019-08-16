@@ -318,7 +318,11 @@ from <app 이름> import views
 
 
 
+app에 해당하는 folder안에서 
+
 templates folder을 생성해서 앞으로 html 작성
+
+
 
 
 
@@ -347,7 +351,7 @@ def image(request):
 
 template: image.html // 전달받은 image 을 img태그 src속성에 담아서 랜덤이미지를 보여준다.
 
-
+m
 
 
 
@@ -367,4 +371,163 @@ template: times.html // 전달받은 context의 값들을 알맞게 표시한다
 https://docs.djangoproject.com/ko/2.2/ref/templates/language/
 
 
+
+---
+
+https://docs.djangoproject.com/en/2.2/ref/templates/builtins/#for
+DTL Django template language
+
+
+
+1. 반복문
+
+```html
+{% for food in menu %}
+<p>{{ food }}</p>
+{% endfor %} {% comment %} 명시적으로 for문이 끝났음을 보여줘야 한다.  {% endcomment %}
+<hr>
+
+{% comment %} 
+{{ forloop }} Django Template Language에서 자동으로 생성되는 객체
+{% endcomment %}
+{% for food in menu %}
+<p>{{ forloop.counter }} {{ food }}</p>
+{% endfor %} 
+{% comment %} 1. 2. 3. 4. 숫자로 된 ol > li 형식이 생긴다. {% endcomment %}
+<hr>
+
+{% for user in empty_list %}
+<p> {{ user }}</p>
+{% empty %}
+<p>현재 가입한 유저가 없습니다.</p>
+{% endfor %}
+<hr>
+```
+
+{% endfor %} 
+
+**띄어쓰기가 없고**, 붙여서 end한다.
+
+2. 조건문
+
+```html
+{% if '짜장면' in menu %}
+<p>짜장면이 메뉴에 있습니다.</p>
+{% endif %}
+
+{% comment %} 레몬은 menu에 없어서 p가 생기지 않는다. {% endcomment %}
+{% if '레몬' in menu %}
+<p>레몬이 메뉴에 있습니다.</p>
+{% endif %}
+
+{% for food in menu %}
+ <p>{{ forloop.counter }}번째 도는 중..</p>
+ {% if forloop.first %}
+ <p>{{ food }} + tip</p>
+ {% else %}
+ <p>{{ food }}</p>
+ {% endif %}
+{% endfor %}
+<hr>
+```
+
+
+
+
+
+3.  length filter 활용
+
+```html
+{% for message in messages %}
+{% comment %} length가 5글자보다 길다면 {% endcomment %}
+{% if message|length > 5  %}
+<p>{{ message }}, 글자가 너무 길어요.</p>
+{% else %}
+<p>{{ message }}, {{ message|length }}</p>
+{% endif %}
+{% endfor %}
+```
+
+
+
+
+
+4. lorem ipsum
+
+```html
+{% lorem %}
+```
+
+   {{ lorem }}은 나오지 않는다. 사용자가 lorem을 넘겨주지 않았기 때문이다.
+
+
+
+
+
+5. 글자 관련 필터: 글자 수 제한(truncate) 
+
+   ** <!--django에서는 html 주석을 쓰지 말것-->
+
+   {% comment %} django에서는 이 주석만 {% endcomment %}
+
+```html
+{% comment %} 단어 단위로 제한 {% endcomment %}
+<p>{{ my_sentence|truncatewords:2 }}</p> 
+{% comment %} 3을 넘으면 ...으로 잘라진다. {% endcomment %}
+{% comment %} 문자 단위로 제한 *3번째는 포함 {% endcomment %}
+<p>{{ my_sentence|truncatechars:3 }}</p>
+{% comment %} 문자 단위로 제한 *10번째는 포함 {% endcomment %}
+<p>{{ my_sentence|truncatechars:10 }}</p>
+```
+
+   
+
+6. 글자 관련 필터
+
+```html
+<p>{{ 'abc'|length }} </p>
+<p>{{ 'ABC'|lower }}</p>
+<p>{{ my_sentence|title }}</p>
+<p>{{ 'abc def'|capfirst }}</p>
+<p>{{ menu|random }}</p>
+<hr>
+```
+
+
+
+7. 연산 ! 연산은 중괄호 두개
+
+https://github.com/dbrgn/django-mathfilters
+
+```html
+{{ 4|add:6 }}
+```
+
+
+
+8. 날짜표현 !중요
+
+```html
+<p>{{ datetimenow }}</p>
+<p>{% now "DATETIME_FORMAT" %}</p>
+<p>{% now "SHORT_DATETIME_FORMAT" %}</p>
+<p>{% now "SHORT_DATE_FORMAT" %}</p>
+<p>{% now "DATE_FORMAT" %}</p>
+<p>{% now "Y년 m월 d일 (D) h:i" %}</p>
+<hr>
+
+{% comment %} current_year이라는 변수에 담아둬라 {% endcomment %}
+{% now "Y" as current_year %}
+<p>Copyright {{ current_year }}</p>
+
+<hr>
+{{ datetimenow|date:"DATE_TIME" }}
+<hr>
+```
+
+9. 기타
+
+```html
+<p>{{ "google.com"|urlize }}</p>
+```
 
