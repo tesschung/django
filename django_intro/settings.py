@@ -62,7 +62,7 @@ ROOT_URLCONF = 'django_intro.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'], # 여기에 최상단의 templates를 적어서 연결한다.
+        'DIRS': [os.path.join(BASE_DIR, 'django_intro', 'templates')], # 여기에 최상단의 templates 연결한다.
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

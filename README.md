@@ -745,3 +745,19 @@ $ python manage.py startapp utilities
 #### 실습
 
 utilities/index/로 접속했을때 django_intro/urls.py에서 utilities/urls.py로 이동시킨 뒤 utilities/urls.py 에 정의된 index 결로를 통해 utilities의 index 페이지가 보여지도록 구현
+
+
+
+### 개발환경 설치 Requirements.txt
+
+```bash
+개발환경 확인
+$ pip list
+
+개발환경 저장
+$ pip freeze > requirements.txt
+
+개발환경 설치
+$ pip install -r requirements.txt
+```
+

@@ -1,18 +1,14 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+{% extends 'base.html' %}
+{% comment %} 최상단의 templates에 있는 html을 상속받는다. {% endcomment %}
+{% block title %}
+Dinner
+{% endblock  %}
   <title>Dinner</title>
-</head>
-<body>
+{% block content %}
   <h1>Dinner 추천입니다.</h1>
   {% comment %} 전달받은 context에서 변수 치환 {% endcomment %}
   {% comment %} {{ }} 중괄호 두 번 사용 {% endcomment %}
   {% comment %} 변수 앞뒤로 띄어쓰기!!!!!! {% endcomment %}
   <p>{{ name }}님! <br/>
   오늘 저녁은 {{ pick }} 에서 드시죠!</p> 
-  
-</body>
-</html>
+{% endblock content %}
