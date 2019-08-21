@@ -172,7 +172,7 @@ student@M702 MINGW64 ~/development/django/django_intro (master)
 $ python manage.py runserver
 ```
 
-- 현재 디렉토리에서 django_intro 라는 이름으로 프로젝트를 시작하겠다.
+- 현재 디렉토리에서 django_intro 라는 이름으로 프로젝트(어플리케이션의 집합)를 시작하겠다.
 - Django project name
   - `-` 캐릭터는 사용될 수 없다.
   - python과 django에서 이미 사용되는 이름은 사용하지 않는다.
@@ -736,5 +736,12 @@ image는 application에 **static** folder를 생성해서 사용하고싶은 ima
 
 
 
+### 개별 APPS에 개별 urls.py추가 연동
+
+$ python manage.py startapp utilities
 
 
+
+#### 실습
+
+utilities/index/로 접속했을때 django_intro/urls.py에서 utilities/urls.py로 이동시킨 뒤 utilities/urls.py 에 정의된 index 결로를 통해 utilities의 index 페이지가 보여지도록 구현

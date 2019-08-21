@@ -15,33 +15,15 @@ Including another URLconf
 """
 # django_intro/urls.py
 from django.contrib import admin
-from django.urls import path
-from pages import views # pages라는 application에서 views를 import한다.
+from django.urls import path, include # include는 다른 urls를 참조 할 수 있도록 한다.
+# from pages import views # pages라는 application에서 views를 import한다.
 
 # www.ssafy.com/login => 아래에 정의가 되어있지 않아서 404 not found
 # www.ssafy.com/index => views.index
 urlpatterns = [
     # path('사용자가 접속하는 경로')
-    path('num_result/', views.num_result),
-    path('num/', views.num),
-
-    path('static_example/', views.static_example),
-
-    path('lotto_result/', views.lotto_result),
-    path('user_lotto_number/', views.user_lotto_number),
-
-    path('result/', views.result),
-    path('search/', views.search),
-
-    path('lotto/', views.lotto),
-    path('isitbirthday2/<str:mybd>/', views.isitbirthday2),
-    path('isitbirthday/<str:mybd>/', views.isitbirthday),
-    path('template_language/', views.template_language),
-    path('times/<int:num1>/<int:num2>/', views.times),
-    path('greeting/<str:name>/', views.greeting),
-    path('image/', views.image),
-    path('dinner/<str:name>/', views.dinner),
-    path('introduce/', views.introduce),
-    path('index/', views.index),
+    # pages에 있는 urls.py로 가도록 설정
+    path('utilities/', include('utilities.urls')),
+    path('pages/', include('pages.urls')), 
     path('admin/', admin.site.urls),
 ]
