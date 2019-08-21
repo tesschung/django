@@ -49,7 +49,54 @@
 
 
 
+### ORM(Object-Relational Mapping)으로 구현하는 CRUD
 
 
-### ORM으로 구현하는 CRUD
+
+
+
+models.py
+
+
+
+models.py 작성후 선언
+
+```bash
+$ python manage.py makemigrations
+Migrations for 'articles':
+  articles\migrations\0001_initial.py
+    - Create model Article
+(venv)
+
+
+# 데이터베이스에 반영 시작
+student@M702 MINGW64 ~/development/django/django/django_orm (master)
+$ python manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, articles, auth, contenttypes, sessions
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying auth.0001_initial... OK
+  Applying admin.0001_initial... OK
+  Applying admin.0002_logentry_remove_auto_add... OK
+  Applying admin.0003_logentry_add_action_flag_choices... OK
+  Applying articles.0001_initial... OK # 우리가 만든 것
+  Applying contenttypes.0002_remove_content_type_name... OK
+  Applying auth.0002_alter_permission_name_max_length... OK
+  Applying auth.0003_alter_user_email_max_length... OK
+  Applying auth.0004_alter_user_username_opts... OK
+  Applying auth.0005_alter_user_last_login_null... OK
+  Applying auth.0006_require_contenttypes_0002... OK
+  Applying auth.0007_alter_validators_add_error_messages... OK
+  Applying auth.0008_alter_user_username_max_length... OK
+  Applying auth.0009_alter_user_last_name_max_length... OK
+  Applying auth.0010_alter_group_name_max_length... OK
+  Applying auth.0011_update_proxy_permissions... OK
+  Applying sessions.0001_initial... OK
+(venv)
+```
+
+
+
+데이터 베이스 확인 extension 설치 
 
