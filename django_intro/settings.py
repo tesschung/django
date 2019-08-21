@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
+# 최상단에있는, 즉 프로젝트 자체에서 관리하는 templates는 BASE_DIR로 인식하게 한다. 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -32,6 +33,7 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     # Local apps
+    'utilities',
     'pages', # 꼭 추가!해야 인식한다.
 
     # Third party apps
@@ -60,7 +62,7 @@ ROOT_URLCONF = 'django_intro.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'], # 여기에 최상단의 templates를 적어서 연결한다.
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
