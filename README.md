@@ -14,21 +14,21 @@ https://developer.mozilla.org/ko/docs/Learn/Server-side/Django/Introduction
 
 MVC pattern
 
-m : model 
+M : model 
 
-v : view
+V : view
 
-c : controller
+C : controller
 
 
 
 MTV
 
-m : model 데이터 관리
+**M** : model 데이터 관리
 
-t : template 사용자가 보는 화면
+**T** : template 사용자가 보는 화면
 
-v : view 중간 관리자
+**V** : view 중간 관리자
 
 
 
