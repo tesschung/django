@@ -1,4 +1,3 @@
-[TOC]
 
 ## Django
 
@@ -740,11 +739,12 @@ image는 application에 **static** folder를 생성해서 사용하고싶은 ima
 
 $ python manage.py startapp utilities
 
-![슬라이드1](C:\Users\student\development\django\django\django_intro\슬라이드1.JPG)
+![슬라이드1](images/슬라이드1.JPG)
 
-![슬라이드2](C:\Users\student\development\django\django\django_intro\슬라이드2.JPG)
+![슬라이드2](images/슬라이드2.JPG)
 
-![슬라이드3](C:\Users\student\development\django\django\django_intro\슬라이드3.JPG)
+![슬라이드3](images/슬라이드3.JPG)
+
 
 #### 실습
 
