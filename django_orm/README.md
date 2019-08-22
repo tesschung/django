@@ -366,3 +366,36 @@ article 의 content내용을 새롭게 정의한다.
 >>> article.save()
 ```
 
+
+
+### django/admin 페이지 시작
+
+admin.py
+
+```python
+from django.contrib import admin
+from .models import Article # 동일한 app에 있는 models에서 Article 호출
+
+# Register your models here.
+@admin.register(Article)  # admin site에 Article을 register
+class ArticleAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title', 'content', 'created_at', 'updated_at')
+```
+
+```bash
+$ python manage.py createsuperuser
+사용자 이름 (leave blank to use 'student'): 
+이메일 주소: 
+Password:
+Password (again):
+Superuser created successfully.
+(venv)
+
+$ python manager.py runserver
+C:\Users\student\AppData\Local\Programs\Python\Python37\python.exe: can't open file 'manager.py': [Errno 2] No such file or directory
+(venv)
+
+$ python manage.py runserver
+```
+
+![슬라이드2](새 폴더/슬라이드2.PNG)
