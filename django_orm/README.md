@@ -400,3 +400,64 @@ $ python manage.py runserver
 
 ![슬라이드2](images/슬라이드2.PNG)
 
+
+
+### extensions
+
+자동으로 다른 여러 모델들을  import되어있는 채로 사용 가능
+
+```bash
+student@M702 MINGW64 ~/development/django/django/django_orm (master)
+$ pip install django-extensions # 설치시 -
+Collecting django-extensions 
+  Downloading https://files.pythonhosted.org/packages/72/0d/fde2cf0ae7e1d12d105683d0259c17c151de4efd5d166c0ec1335541e7ba/django_extensions-2.2.1-py2.py3-none-any.whl (222kB)
+     |████████████████████████████████| 225kB 252kB/s
+Collecting six>=1.2 (from django-extensions)
+  Using cached https://files.pythonhosted.org/packages/73/fb/00a976f728d0d1fecfe898238ce23f502a721c0ac0ecfedb80e0d88c64e9/six-1.12.0-py2.py3-none-any.whl
+Installing collected packages: six, django-extensions
+Successfully installed django-extensions-2.2.1 six-1.12.0
+(venv)
+```
+
+settings.py
+
+```python
+INSTALLED_APPS = [
+
+    # local apps
+    'articles',
+
+    # third party apps
+    'django_extensions', # 등록시 _
+
+    # django apps
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+]
+```
+
+```bash
+$ python manage.py shell_plus
+# Shell Plus Model Imports
+from articles.models import Article
+from django.contrib.admin.models import LogEntry
+from django.contrib.auth.models import Group, Permission, User
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.sessions.models import Session
+# Shell Plus Django Imports
+from django.core.cache import cache
+from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.db import transaction
+from django.db.models import Avg, Case, Count, F, Max, Min, Prefetch, Q, Sum, When, Exists, OuterRef, Subquery
+from django.utils import timezone
+from django.urls import reverse
+Python 3.7.4 (tags/v3.7.4:e09359112e, Jul  8 2019, 20:34:20) [MSC v.1916 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+(InteractiveConsole)
+```
+
