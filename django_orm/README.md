@@ -1,5 +1,9 @@
 [TOC]
 
+# Django ORM
+
+
+
 ### 데이터베이스(DB: Database)
 
 - 체계화된 데이터의 모임
@@ -99,4 +103,266 @@ Running migrations:
 
 
 데이터 베이스 확인 extension 설치 
+
+
+
+
+
+### create
+
+### 기초설정
+
+작성한 model에 접근하기 위해서 bash에서 다음을 명령
+
+- Shell
+
+```bash
+student@M702 MINGW64 ~/development/django/django/django_orm (master)
+$ python manage.py shell
+Python 3.7.4 (tags/v3.7.4:e09359112e, Jul  8 2019, 20:34:20) [MSC v.1916 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+(InteractiveConsole)
+>>>
+```
+
+- Import model
+```bash
+>>> from articles.models import Article
+```
+
+
+
+
+
+### 데이터를 저장하는 3가지 방법
+
+1. 첫번째 방식
+   - ORM을 쓰는 이유: DB를 조작 방식을 객체지향 프로그래밍(클래스) 처럼 하기 위해서
+
+```bash
+>>> Article.objects.all() # objects는 DB에 접근해서 명령을 내리는 객체 * 앞으로 모든 명령은 objects를 통해서 명령!
+# 변수명.objects.함수
+<QuerySet []> # 어떠한 정보도 가지고있지 않아서 [] 비어있다!
+```
+
+
+```bash
+![슬라이드1](images/슬라이드1.PNG)>>> article = Article()
+>>> article
+<Article: Article object (None)> # 객체임을 확인 가능
+
+>>> article.title = 'First article'
+>>> article.content = 'Hello, article?'
+
+>>> article.title
+'First article'
+>>> article.content
+'Hello, article?'
+
+>>> article.save() # 데이터 저장
+>>> article
+<Article: Article object (1)> # id값이 생성되면서, id값이 보여진다.
+```
+
+![슬라이드1](images/슬라이드1.PNG)
+
+위 처럼, DB에 해당 데이터가 저장되면서 동시에 id(Primary key)값이 생긴 것을 확인 할 수 있다.
+
+```bash
+>>> Article.objects.all()
+<QuerySet [<Article: Article object (1)>]> # 채워져있다!
+```
+
+
+
+2. 두번째 방식
+   - 함수에서 Keyword 인자 넘기기 방식과 동일
+
+```bash
+>>> article = Article(title='Second title', content='Hello, second article')
+>>> article.save()
+```
+
+3. 세번째 방식
+   - create를 사용하면 쿼리셋 객체를 생성하고 저장하는 로직이 한 번의 스텝
+
+
+```bash
+>>> Article.objects.create(title='Third', content='Hello, third')
+<Article: Article object (3)>
+>>> article.save()
+```
+
+4. 검증
+   - full_clean() 함수를 통해 저장하기 전 데이터를 검증할 수 있다.
+
+
+```bash
+>>> article.full_clean()
+```
+
+
+
+### **Article.objects.all()**의 객체 표현 변경
+
+```bash
+>>> Article.objects.all()
+<QuerySet [<Article: Article object (1)>, <Article: Article object (2)>, <Article: Article object (3)>]>
+```
+
+객체 표현 변경
+
+- articles/models.py에서 객체표현을 변경하는 def 함수 정의
+
+
+```python
+class Article(models.Model): # django Model을 상속 받는다.
+    # id(pk)는 기본적으로 처음 테이블 생성시 자동으로 만들어진다.
+    # database는 primary key PK 가 반드시 있어야 한다.
+    # id = models.AutoField(primary_key=True)
+
+    # 모든 필드는 기본적으로 NOT NULL -> 비어있으면 안된다.
+
+    # CharField에서는 max_length가 필수 인자다.
+    title = models.CharField(max_length=20) # 클래스 변수 (DB 필드)
+    content = models.TextField() # 클래스 변수 (DB 필드)
+    created_at = models.DateTimeField(auto_now_add=True) # 자동으로 지금 추가되었을때
+    updated_at = models.DateTimeField(auto_now=True) # 수정이 가해질때 해당 시간을 추가
+
+    
+    ########## 정의
+    def __str__(self):
+        return f'{self.id}번 글 - {self.title} : {self.content}'
+
+```
+
+
+```bash
+student@M702 MINGW64 ~/development/django/django/django_orm (master)
+$ python manage.py shell
+Python 3.7.4 (tags/v3.7.4:e09359112e, Jul  8 2019, 20:34:20) [MSC v.1916 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+(InteractiveConsole)
+>>> from articles.models import Article
+>>> Article.objects.all()
+# 다시 시작하면, 아래와 같이 표현 변경이 됨
+<QuerySet [<Article: 1번 글 - First article : Hello, article?>, <Article: 2번 글 - Second title : Hello, second article>, <Article: 3번 글 - Third : Hello, third>]>
+```
+
+
+
+### READ
+
+
+
+- DB에 저장된 글중에서 title이 'Second title'인 것만 가져오기
+
+
+```bash
+>>> Article.objects.filter(title='Second title')
+<QuerySet [<Article: 2번 글 - Second title : Hello, second article>]>
+```
+
+- querySet = Article.objects.filter(title='Second title')
+
+```bash
+>>> querySet = Article.objects.filter(title='Second title')
+>>> querySet
+<QuerySet [<Article: 2번 글 - Second title : Hello, second article>]>
+
+# 없으면 그냥 빈 리스트를 준다
+>>> Article.objects.filter(pk=10)
+<QuerySet []>
+
+# first()와 last() 사용
+>>> querySet.first()
+<Article: 2번 글 - Second title : Hello, second article>
+>>> Article.objects.filter(title='Second title').last()
+<Article: 2번 글 - Second title : Hello, second article>
+```
+
+- DB에 저장된 글 중에서 pk가 1인 글만 가지고 오기
+
+  ***pk만 `get()`으로 가지고 올 수 있다.** 
+
+```bash
+>>> Article.objects.get(pk=1)
+<Article: 1번 글 - First article : Hello, article?>
+
+# filter()와는 달리 error을 준다.
+>>> Article.objects.get(pk=10)
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+  File "C:\Users\student\development\django\django\django_orm\venv\lib\site-packages\django\db\models\manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "C:\Users\student\development\django\django\django_orm\venv\lib\site-packages\django\db\models\query.py", line 408, in get
+    self.model._meta.object_name
+articles.models.Article.DoesNotExist: Article matching query does not exist.
+```
+
+- 오름차순
+```bash
+>>> articles = Article.objects.order_by('pk')
+>>> articles
+<QuerySet [<Article: 1번 글 - First article : Hello, article?>, <Article: 2번 글 - Second title : Hello, second article>, <Article: 3번 글 - Third : Hello, third>]>
+```
+
+- 내림차순
+
+```bash
+>>> articles = Article.objects.order_by('-pk') # - 를 붙여준다.
+>>> articles
+<QuerySet [<Article: 3번 글 - Third : Hello, third>, <Article: 2번 글 - Second title : Hello, second article>, <Article: 1번 글 - First article : Hello, article?>]>
+```
+
+- QuerySet은 list처럼 index접근이 가능해서 Slicing이 가능하다.
+
+Indexing
+```bash
+>>> article = articles[2]
+>>> article
+<Article: 1번 글 - First article : Hello, article?>
+```
+Slicing
+
+```bash
+>>> articles = Article.objects.all()[1:3]
+>>> articles
+<QuerySet [<Article: 2번 글 - Second title : Hello, second article>, <Article: 3번 글 - Third : Hello, third>]>
+```
+- like - 문자열을 포함하는 값을 가지고 온다.
+
+```bash
+>>> articles = Article.objects.filter(title__contains='e') # double underscores
+>>> articles
+<QuerySet [<Article: 1번 글 - First article : Hello, article?>, <Article: 2번 글 - Second title : Hello, second article>]>
+```
+- start**s**with 
+
+```bash
+>>> articles = Article.objects.filter(title__startswith='First')
+>>> articles
+<QuerySet [<Article: 1번 글 - First article : Hello, article?>]>
+```
+- end**s**with
+
+```bash
+>>> articles = Article.objects.filter(content__endswith='third')
+>>> articles
+<QuerySet [<Article: 3번 글 - Third : Hello, third>]>
+```
+
+
+
+### UPDATE
+
+article 의 content내용을 새롭게 정의한다.
+
+```bash
+>>> article = Article.objects.get(pk=2)
+>>> article.content
+'Hello, second article'
+>>> article.content = 'new content'
+>>> article.save()
+```
 
