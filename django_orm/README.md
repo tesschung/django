@@ -398,5 +398,5 @@ C:\Users\student\AppData\Local\Programs\Python\Python37\python.exe: can't open f
 $ python manage.py runserver
 ```
 
-![슬라이드2](새 폴더/슬라이드2.PNG)
+![슬라이드2](images/슬라이드2.PNG)
 
