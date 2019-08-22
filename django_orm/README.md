@@ -399,3 +399,4 @@ $ python manage.py runserver
 ```
 
 ![슬라이드2](새 폴더/슬라이드2.PNG)
+
