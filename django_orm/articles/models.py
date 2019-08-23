@@ -23,3 +23,9 @@ class Article(models.Model): # django Model을 상속 받는다.
 
     def __str__(self):
         return f'{self.id}번 글 - {self.title} : {self.content}'
+
+class Student(models.Model):
+    name = models.CharField(max_length=20)
+    email = models.CharField(max_length=20)
+    birthday = models.DateField()
+    age = models.IntegerField()

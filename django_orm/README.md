@@ -366,7 +366,15 @@ article 의 content내용을 새롭게 정의한다.
 >>> article.save()
 ```
 
+### Delete
 
+```bash
+article 인스턴스 호출 후 .delete() 함수를 실행한다.
+
+>>> article = Article.objects.get(pk=2)
+>>> article.delete()
+(1, {'articles.Article': 1})
+```
 
 ### django/admin 페이지 시작
 
@@ -390,11 +398,6 @@ Password:
 Password (again):
 Superuser created successfully.
 (venv)
-
-$ python manager.py runserver
-C:\Users\student\AppData\Local\Programs\Python\Python37\python.exe: can't open file 'manager.py': [Errno 2] No such file or directory
-(venv)
-
 $ python manage.py runserver
 ```
 
@@ -460,6 +463,17 @@ Python 3.7.4 (tags/v3.7.4:e09359112e, Jul  8 2019, 20:34:20) [MSC v.1916 64 bit 
 Type "help", "copyright", "credits" or "license" for more information.
 (InteractiveConsole)
 ```
+
+
+
+
+
+
+
+
+
+
+
 
 
 
