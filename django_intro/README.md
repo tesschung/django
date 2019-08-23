@@ -104,7 +104,7 @@ $ pip list
 - VS Code Extensions에서 `Python`과 `Django`설치
 
 - `ctrl + shift + p => python: select interpreter => 방금  생성한 가상환경을 선택(.\venv\Scripts\python.exe)`
-  - .vscode/settings.json 파일이 생성되며 터미넣에서 자동으로 가상환경 적용되는 것을 확인
+  - .vscode/settings.json 파일이 생성되며 터미널에서 자동으로 가상환경 적용되는 것을 확인
 
 ```bash
 student@M702 MINGW64 ~/development/django/django_intro (master)
