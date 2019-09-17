@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>template_language</title>
+</head>
+<style>
+body {
+  height: 3000px
+}
+</style>
+<body>
+
+<h1>Template Language</h1>
+<hr>
+
+<h2>1. 반복문</h2>
+{% for food in menu %}
+<p>{{ food }}</p>
+{% endfor %} {% comment %} 명시적으로 for문이 끝났음을 보여줘야 한다. 작성하지 않으면 syntax error {% endcomment %}
+<hr>
+
+{% comment %} 
+{{ forloop }} Django Template Language에서 자동으로 생성되는 객체
+{% endcomment %}
+{% for food in menu %}
+<p>{{ forloop.counter }} {{ food }}</p>
+{% endfor %} 
+{% comment %} 1. 2. 3. 4. 숫자로 된 ol > li 형식이 생긴다. {% endcomment %}
+<hr>
+
+{% for user in empty_list %}
+<p> {{ user }}</p>
+{% empty %}
+<p>현재 가입한 유저가 없습니다.</p>
+{% endfor %}
+<hr>
+
+<h2>2. 조건문</h2>
+{% if '짜장면' in menu %}
+<p>짜장면이 메뉴에 있습니다.</p>
+{% endif %}
+
+{% comment %} 레몬은 menu에 없어서 p가 생기지 않는다. {% endcomment %}
+{% if '레몬' in menu %}
+<p>레몬이 메뉴에 있습니다.</p>
+{% endif %}
+
+{% for food in menu %}
+ <p>{{ forloop.counter }}번째 도는 중..</p>
+ {% if forloop.first %}
+ <p>{{ food }} + tip</p>
+ {% else %}
+ <p>{{ food }}</p>
+ {% endif %}
+{% endfor %}
+<hr>
+
+<h2>3. length filter 활용 </h2>
+{% for message in messages %}
+{% comment %} length가 5글자보다 길다면 {% endcomment %}
+{% if message|length > 5  %}
+<p>{{ message }}, 글자가 너무 길어요.</p>
+{% else %}
+<p>{{ message }}, {{ message|length }}</p>
+{% endif %}
+{% endfor %}
+<hr>
+
+<h2>4. lorem ipsum</h2>
+{% lorem %}
+<hr>
+{% comment %} lorem의 3 words {% endcomment %}
+{% lorem 3 w %}
+<hr>
+{% comment %} lorem의 4단어중에 랜덤으로 {% endcomment %}
+{% lorem 4 w random %}
+<hr>
+{% comment %} lorem의 2문단 {% endcomment %}
+{% lorem 2 p %}
+<hr>
+
+<h2>5. 글자 관련 필터: 글자 수 제한(truncate)</h2>
+{% comment %} 단어 단위로 제한 {% endcomment %}
+<p>{{ my_sentence|truncatewords:2 }}</p> 
+{% comment %} 3을 넘으면 ...으로 잘라진다. {% endcomment %}
+{% comment %} 문자 단위로 제한 *3번째는 포함 {% endcomment %}
+<p>{{ my_sentence|truncatechars:3 }}</p>
+{% comment %} 문자 단위로 제한 *10번째는 포함 {% endcomment %}
+<p>{{ my_sentence|truncatechars:10 }}</p>
+
+<h2>6. 글자 관련 필터</h2>
+<p>{{ 'abc'|length }} </p>
+<p>{{ 'ABC'|lower }}</p>
+<p>{{ my_sentence|title }}</p>
+<p>{{ 'abc def'|capfirst }}</p>
+<p>{{ menu|random }}</p>
+<hr>
+
+<h2>7. 연산</h2>
+<p>{{ 4|add:6 }}</p>
+
+{% comment %} 
+{% now %} 가 내장되어 있다.
+{% endcomment %}
+<h2>8. 날짜표현</h2>
+<p>{{ datetimenow }}</p>
+<p>{% now "DATETIME_FORMAT" %}</p>
+<p>{% now "SHORT_DATETIME_FORMAT" %}</p>
+<p>{% now "SHORT_DATE_FORMAT" %}</p>
+<p>{% now "DATE_FORMAT" %}</p>
+<p>{% now "Y년 m월 d일 (D) h:i" %}</p>
+<hr>
+
+{% comment %} current_year이라는 변수에 담아둬라 {% endcomment %}
+{% now "Y" as current_year %}
+<p>Copyright {{ current_year }}</p>
+
+<hr>
+{{ datetimenow|date:"DATE_TIME" }}
+<hr>
+
+
+<h2>9. 기타</h2>
+<p>{{ "google.com"|urlize }}</p>
+
+</body>
+</html>

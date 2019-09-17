@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Articles Index</title>
+</head>
+<body>
+  <h1>Articles Index</h1>
+  <a href="/articles/new/">[게시글 작성]</a>
+  <hr>
+  {% for article in articles %}
+  <article>
+    <h3>{{ article.pk }}. {{ article.title }}</h3>
+    <p>{{ article.content }}</p>
+    <p>{{ article.created_at }}</p>
+    <a href="/articles/{{ article.pk }}/edit/">[수정하기]</a>
+    <a href="/articles/{{ article.pk }}/delete/">[삭제하기]</a>
+    <br>
+  </article>
+  {% endfor %}
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>게시글 수정</title>
+</head>
+<body>
+  <h1>게시글 수정</h1>
+  <form action="/articles/{{ article.pk }}/update/">
+    <input type="text" name="title" value="{{ article.title }}">
+    <textarea name="content" cols="30" rows="10">{{ article.content }}</textarea>
+    <button type="submit">수정하기</button>
+    <a href="/articles/">[뒤로가기]</a>
+  </form>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %} Articles Index {% endblock  %}
+
+{% block content %} 
+<h1>Article List</h1>
+<a href="/articles/new/">게시글 작성</a>
+<ul>
+{% for article in articles %} 
+<li>title: {{ article.id }}</li>
+<li>title: {{ article.title }}</li>
+<li>content: {{ article.content }}</li>
+<hr>
+{% endfor %}
+</ul>
+{% endblock  %}
