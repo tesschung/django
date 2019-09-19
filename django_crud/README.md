@@ -159,14 +159,34 @@ urlpatterns = [
 
 
 
-:two: 
+:two: html
 
+앞에 꼭 /를 붙여야 동일한 application 내에서 이동한다.
 
+new.html
 
+```html
+<form action="/articles/create/">
+```
 
-
-```python
-
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>NEW ARTICLE</title>
+</head>
+<body>
+  <h1>NEW ARTICLE</h1>
+  <form action="/articles/create/">
+  <input type="text" name="title"><br>
+  <textarea name="content" cols="30" rows="10"></textarea><br>
+  <button type="submit">생성하기</button>
+  </form>
+</body>
+</html>
 ```
 
 
