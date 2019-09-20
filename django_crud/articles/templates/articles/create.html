@@ -1,11 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>CREATE</title>
-</head>
-<body>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}
+NEW ARTICLE
+{% endblock title %}
+
+{% block body %}
+  <h1>NEW ARTICLE</h1>
+  <!-- <form action="/articles/create/"> -->
+  <form action="{% url 'articles:create' %}" method="POST">
+  {% csrf_token %}
+  <input type="text" name="title"><br>
+  <textarea name="content" cols="30" rows="10"></textarea><br>
+  <button type="submit">생성하기</button>
+  </form>
+  <a href="{% url 'articles:index' %}">뒤로가기</a>
+{% endblock body %}

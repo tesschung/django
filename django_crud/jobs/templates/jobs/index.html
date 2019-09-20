@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}
+your past!
+{% endblock title %}
+
+
+{% block body %}
+
+<div class="mx-auto" style="width: 200px; ">
+<form action="{% url 'jobs:index' %}" method="POST">
+{% csrf_token %}
+  <input type="text" name="name" placeholder="이름입력"><br>
+  <button type="submit" class="btn btn-dark">전생보기</button>
+</form>
+</div>
+{% endblock body %}

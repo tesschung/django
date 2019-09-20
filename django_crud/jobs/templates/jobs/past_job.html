@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}
+result!
+{% endblock title %}
+
+{% block body %}
+<div class="card" style="width: 18rem;">
+<img src="{{ img }}" alt="img"><br>
+<div class="card-body">
+<h5 class="card-title">이름: {{ job.name }}</h5>
+<p class="card-text">전생: {{ job.past_job }}</p>
+{% comment %} <p>{{ imgURL }}</p> {% endcomment %}
+<a href="{% url 'jobs:index' %}" class="btn btn-dark">뒤로가기</a>
+</div>
+{% endblock body %}
