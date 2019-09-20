@@ -250,7 +250,7 @@ new.html
 
 
 
-
+:heavy_check_m
 
 
 
@@ -273,7 +273,20 @@ Representational State Transfer API
 ### REST API 구성
 
 - **자원(RESOURCE)** - URI
+
 - **행위(Verb)** - HTTP METHOD
+
+  **GET은 가져오는 것이고 POST는 수행하는 것입니다.**
+
+  - POST 
+  - GET
+
+  GET은 URL에 이어붙기 때문에 길이제한이 있어서 많은양의 데이터는 보내기 어렵고 POST는 많은 양의 보내기에도 적합하다.(역시 용량제한은 있지만)
+
+  GET은 주소줄에 값이 ?뒤에 쌍으로 이어붙고 POST는 숨겨져서(body안에) 보내진다.
+
+  즉 http://url/bbslist.html?id=5&pagenum=2 같이 하는 것이 GET방식이고 form을 이용해서 submit을 하는 형태가 POST입니다.
+
 - **표현(Representations)**
 
 ### REST API 디자인 가이드
@@ -468,5 +481,110 @@ https://developers.giphy.com/docs/api/endpoint
 
 
 
-# database: 1vsN
+# database: 1vsN 게시판 구현
+
+의존성 띄는 테이블 구현
+
+하나의 게시글 - 여러개의 댓글
+
+댓글을 저장하는 방법
+
+댓글을 어떻게 저장하는게 좋을까?
+
+
+
+댓글이 어떤 게시글에 속하는지 article_pk로 연결(foreign key)한다.
+
+이런것을 1vsN관계라고 한다.
+
+
+
+```bash
+student@M702 MINGW64 ~/development/정승원_django_git/django/django_crud (master)
+$ venv
+(3.7.4)
+student@M702 MINGW64 ~/development/정승원_django_git/django/django_crud (master)
+$ pip install django_extensions
+Collecting django_extensions
+  Using cached https://files.pythonhosted.org/packages/72/0d/fde2cf0ae7e1d12d105683d0259c17c151de4efd5d166c0ec1335541e7ba/django_extensions-2.2.1-py2.py3-none-any.whl
+Requirement already satisfied: six>=1.2 in c:\users\student\python-virtualenv\3.7.4\lib\site-packages (from django_extensions) (1.12.0)
+Installing collected packages: django-extensions
+Successfully installed django-extensions-2.2.1
+(3.7.4)
+
+# settings의 INSTALLED_APPS에 'django_extensions'저장후
+
+student@M702 MINGW64 ~/development/정승원_django_git/django/django_crud (master)
+$ venv
+(3.7.4)
+student@M702 MINGW64 ~/development/정승원_django_git/django/django_crud (master)
+$ python manage.py shell_plus
+
+>>> article = Article()
+>>> article.title = '새로운데이터'
+>>> article.content = '새로운내용'
+>>> article
+<Article: Article object (None)>
+>>> article.save()
+>>> article
+<Article: Article object (27)>
+>>> comment = Comment()
+>>> comment.content = 'First comment'
+>>> comment.article = article # 객체자체를 통째로 넣어준다.
+
+### 다음과 같이 진행
+>>> article = Article()
+>>> article.title = '새로운데이터'
+>>> article.content = '새로운내용'
+>>> article.save()
+>>> comment = Comment()
+>>> comment.content = 'First comment'
+>>> comment.article = article
+>>> comment.save()
+>>> comment
+<Comment: First comment>
+
+# 다음과 같이 한번에 선언
+>>> comment = Comment(article=article, content='Second')
+>>> comment.save()
+>>> comment.pk
+3
+>>> comment = Comment(article=article, content='4')
+>>> comment.save()
+>>> comment.pk
+4
+>>> comment
+<Comment: 4>
+>>> comment.content
+'4'
+>>> comment.article # 댓글 입장에서
+<Article: Article object (28)>
+
+# article에서 가능한 속성들을 나열하는 명령
+>>> dir(article)
+['DoesNotExist', 'MultipleObjectsReturned', '__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__',
+'__format__', '__ge__', '__getattribute__', '__getstate__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__setstate__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_check_column_name_clashes', '_check_constraints', '_check_field_name_clashes', '_check_fields', '_check_id_field', '_check_index_together', '_check_indexes',
+'_check_local_fields', '_check_long_column_names', '_check_m2m_through_same_relationship', '_check_managers', '_check_model', '_check_model_name_db_lookup_clashes', '_check_ordering', '_check_property_name_related_field_accessor_clashes', '_check_single_primary_key', '_check_swappable', '_check_unique_together', '_do_insert', '_do_update', '_get_FIELD_display', '_get_next_or_previous_by_FIELD', '_get_next_or_previous_in_order', '_get_pk_val', '_get_unique_checks', '_meta', '_perform_date_checks', '_perform_unique_checks', '_save_parents', '_save_table', '_set_pk_val', '_state', 'check', 'clean', 'clean_fields', 'comment_set', 'content', 'created_at', 'date_error_message', 'delete', 'from_db', 'full_clean', 'get_deferred_fields', 'get_next_by_created_at', 'get_next_by_updated_at', 'get_previous_by_created_at', 'get_previous_by_updated_at', 'id', 'objects', 'pk', 'prepare_database_save', 'refresh_from_db', 'save', 'save_base', 'serializable_value', 'title', 'unique_error_message', 'updated_at', 'validate_unique']
+
+
+>>> dir(article.comment_set)
+['__call__', '__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__slotnames__', '__str__', '__subclasshook__', '__weakref__', '_apply_rel_filters', '_constructor_args', '_db', '_get_queryset_methods', '_hints', '_insert', '_queryset_class', '_remove_prefetched_objects', '_set_creation_counter', '_update', 'add', 'aggregate', 'all', 'annotate', 'auto_created', 'bulk_create', 'bulk_update', 'check', 'complex_filter', 'contribute_to_class', 'core_filters', 'count', 'create', 'creation_counter', 'dates', 'datetimes', 'db', 'db_manager', 'deconstruct', 'defer', 'difference', 'distinct', 'do_not_call_in_templates', 'earliest', 'exclude', 'exists', 'explain', 'extra', 'field', 'filter', 'first', 'from_queryset', 'get', 'get_or_create', 'get_prefetch_queryset', 'get_queryset', 'in_bulk', 'instance', 'intersection', 'iterator', 'last', 'latest', 'model', 'name', 'none', 'only', 'order_by', 'prefetch_related', 'raw', 'reverse', 'select_for_update', 'select_related', 'set', 'union', 'update', 'update_or_create', 'use_in_migrations', 'using', 'values', 'values_list']
+
+
+## 다시 가져올때 
+>>> article = Article.objects.get(pk=28)
+>>> article
+<Article: Article object (28)>
+>>> comments = article.comment_set.all()
+# article에 달린 댓글들을 queryset으로 가지고온다
+# 마지막으로 달린 댓글이 먼저 가지고 와지는 것은 model에서 그렇게 정의했기 때문
+>>> comments
+<QuerySet [<Comment: 4>, <Comment: Second>, <Comment: First comment>]>
+>>> article.comment_set.get(pk=3)
+<Comment: Second>
+>>> article.comment_set.filter(content='Second').first()
+<Comment: Second>
+>>> article.comment_set.filter(content='Second')
+<QuerySet [<Comment: Second>]>
+```
 

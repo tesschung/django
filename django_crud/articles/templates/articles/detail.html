@@ -7,8 +7,24 @@ detail
 {% block body %}
 <p>제목: {{ article.title }}</p>
 <p>내용: {{ article.content }}</p>
-<p>작성일자: {{ article.created_at }}</p>
-<p>수정일자: {{ article.updated_at }}</p>
+<p>작성일자: {{ article.created_at }}</p><p>수정일자: {{ article.updated_at }}</p>
+
+<hr>
+<h4>Comments</h4>
+{% comment %} 댓글 작성을 위한 form {% endcomment %}
+<form action="{% url 'articles:comments_create' article.pk %}" method="POST">
+{% csrf_token %}
+<input type="text" name="content">
+<button type="submit">댓글작성</button>
+</form>
+<ul>
+{% for comment in comments %}
+<li>{{ comment.content }}</li>
+{% empty %}
+<p>아직 댓글이 없습니다.</p>
+{% endfor %}
+</ul>
+<hr>
 <a href="{% url 'articles:index' %}">뒤로가기</a>
 <a href="{% url 'articles:update' article.pk %}">수정하기</a>
 <form action="{% url 'articles:delete' article.pk %}" method="POST" onclick="return confirm('삭제?')">
