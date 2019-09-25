@@ -1,11 +1,14 @@
 from django.db import models
 
-# Create your models here.
-
 # article입장에서 comment를 바로 가져올 수 없기때문에 따로 불러와야 한다.
-class Article(models.Model):
+class Article(models.Model): # article에 img 저장
     title = models.CharField(max_length=20)
-    content = models.TextField()
+    content = models.TextField(blank=True) # 문자열 빈 값 저장은 null값이 아니라 ''(빈스트링)
+    sub_content = models.IntegerField(null=True) # 문자열을 제외하고는 ''(빈스트링), Null(null값) 두 가지 가능
+    # blank: 데이터 유효성과 관련되어있다.
+    # null: DB와 관련되어있다.
+    # ''(빈스트링), Null(null값) 두 가지로 저장결과가 달라진다.
+    image = models.ImageField(blank=True) # 데이터가 들어오기 전에 blank값이 들어와도 저장할 수 있도록 기본 설정
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
