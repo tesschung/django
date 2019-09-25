@@ -13,7 +13,8 @@ def index(request):
 
 def detail(request, article_pk):
     article = get_object_or_404(Article, pk=article_pk)
-    comments = article.comment_set.all()
+    # comments = article.comment_set.all()
+    comments = article.comments.all() # model 수정 후 바꿀 수 있게 되었다.
     context = {
         'article': article,
         'comments': comments,
@@ -74,16 +75,32 @@ def update(request, article_pk):
         }
         return render(request, 'articles/update.html', context)
 
-
+# article_pk에 해당하는 article에 새로운 comment 생성
 def comments_create(request, article_pk):
-    # article_pk에 해당하는 article에 새로운 comment 생성
-    # 생성한 다음 article detail page로 redirect
     article = Article.objects.get(pk=article_pk)
-
     if request.method == 'POST':
         content = request.POST.get('content')
         comment = Comment()
         comment.content = content
         comment.article = article
         comment.save()
+        # 생성한 다음 article detail page로 redirect
         return redirect('articles:detail', article.pk)
+
+# comment_pk에 해당하는 댓글 삭제
+def comments_delete(request, article_pk ,comment_pk): 
+    '''
+    urls에서 article_pk를 먼저 받고, 
+    그다음에 comment_pk를 받기때문에 이와 같이 인자 순서를 정해서 받는다.
+    '''
+    # model에서 pk에 해당하는 instance를 호출해준다.
+    comment = get_object_or_404(Comment, pk=comment_pk) # 특정 model하나를 가지고 오고 없으면 404페이지 전달
+    if request.method == 'POST':
+        comment.delete() # 있으면 바로 삭제
+        # 삭제한 다음 article detail page로 redirect
+        return redirect('articles:detail', article_pk)
+
+    else:
+        # 해당하는 instance가 없다면, 삭제하지 않고 바로 디테일 페이지로 redirect
+        return redirect('articles:detail', article_pk)
+    

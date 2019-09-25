@@ -588,3 +588,62 @@ $ python manage.py shell_plus
 <QuerySet [<Comment: Second>]>
 ```
 
+
+
+# shell start
+
+```bash
+$ python manage.py shell_plus
+# Shell Plus Model s
+from articles.models import Article, Comment
+from django.contrib.admin.models import LogEntry
+from django.contrib.auth.models import Group, Permission, User
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.sessions.models import Session
+from jobs.models import Job
+# Shell Plus Django Imports
+from django.core.cache import cache
+from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.db import transaction
+from django.db.models import Avg, Case, Count, F, Max, Min, Prefetch, Q, Sum, When, Exists, OuterRef, Subquery
+from django.utils import timezone
+from django.urls import reverse
+Python 3.7.4 (tags/v3.7.4:e09359112e, Jul  8 2019, 20:34:20) [MSC v.1916 64 bit (AMD64)]
+Type 'copyright', 'credits' or 'license' for more information
+IPython 7.8.0 -- An enhanced Interactive Python. Type '?' for help.
+
+
+In [5]: article = Article.objects.all()
+
+In [6]: article
+Out[6]: <QuerySet [<Article: Article object (22)>, <Article: Article object (26)>, <Article: Article object (28)>, <Article: Article object (29)>]>
+# 존재하고 있는 pk를 가진 article 정보를 불러온다
+In [7]: article = Article.objects.get(pk=22)
+```
+
+
+
+## 댓글 삭제
+
+view.py
+
+```python
+# comment_pk에 해당하는 댓글 삭제
+def comments_delete(request, article_pk ,comment_pk): 
+    '''
+    urls에서 article_pk를 먼저 받고, 
+    그다음에 comment_pk를 받기때문에 이와 같이 인자 순서를 정해서 받는다.
+    '''
+    # model에서 pk에 해당하는 instance를 호출해준다.
+    comment = get_object_or_404(Comment, pk=comment_pk) # 특정 model하나를 가지고 오고 없으면 404페이지 전달
+    if request.method == 'POST':
+        comment.delete() # 있으면 바로 삭제
+        # 삭제한 다음 article detail page로 redirect
+        return redirect('articles:detail', article_pk)
+
+    else:
+        # 해당하는 instance가 없다면, 삭제하지 않고 바로 디테일 페이지로 redirect
+        return redirect('articles:detail', article_pk)
+```
+

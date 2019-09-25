@@ -11,7 +11,8 @@ class Article(models.Model):
 
 class Comment(models.Model):
     # on_delete=models.CASCADE == 'Article이 삭제되면 Comment도 함께 삭제'
-    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    # related_name은 원래 article.comment_set으로 썼던 것을 article.comments로 쓸 수 있도록 변경
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='comments')
     content = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

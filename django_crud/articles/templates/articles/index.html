@@ -15,9 +15,10 @@ ARTICLES
 
   <div>
   <!-- <a href="/articles/detail/{{ article.pk }}/"><h3> -->
-      <a href="{% url 'articles:detail' article.pk %}"><h3>    
-      {{ article.pk }}. {{ article.title }}
-    </h3></a>
+      <a href="{% url 'articles:detail' article.pk %}" style="color:black"><h3>    
+      {{ article.pk }}: {{ article.title }}
+    </h3>
+    </a>
   <p> {{ article.content }} </p>
   </div>
 

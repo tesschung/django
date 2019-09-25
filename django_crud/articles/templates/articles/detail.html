@@ -16,14 +16,22 @@ detail
 {% csrf_token %}
 <input type="text" name="content">
 <button type="submit">댓글작성</button>
+
 </form>
 <ul>
 {% for comment in comments %}
-<li>{{ comment.content }}</li>
+  <li>
+    {{ comment.content }}
+    <form action="{% url 'articles:comments_delete' article.pk comment.pk%}" method="POST" onclick="return confirm('삭제?')">
+    {% csrf_token %}
+      <button type="submit">삭제하기</button>
+    </form>
+  </li>
 {% empty %}
-<p>아직 댓글이 없습니다.</p>
+  <p>아직 댓글이 없습니다.</p>
 {% endfor %}
 </ul>
+
 <hr>
 <a href="{% url 'articles:index' %}">뒤로가기</a>
 <a href="{% url 'articles:update' article.pk %}">수정하기</a>
