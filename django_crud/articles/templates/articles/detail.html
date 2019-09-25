@@ -6,10 +6,13 @@ detail
 
 {% block body %}
 <p>제목: {{ article.title }}</p>
-<p>내용: {{ article.content }}</p>
 <p>작성일자: {{ article.created_at }}</p><p>수정일자: {{ article.updated_at }}</p>
-
+<p>내용: {{ article.content }}</p>
 <hr>
+{% if article.image %}
+  <p>사진: 
+  <img src="{{ article.image.url }}" alt="{{ article.image }}"></p>
+{% endif %}
 <h4>Comments</h4>
 {% comment %} 댓글 작성을 위한 form {% endcomment %}
 <form action="{% url 'articles:comments_create' article.pk %}" method="POST">
@@ -33,8 +36,8 @@ detail
 </ul>
 
 <hr>
-<a href="{% url 'articles:index' %}">뒤로가기</a>
-<a href="{% url 'articles:update' article.pk %}">수정하기</a>
+<a href="{% url 'articles:index' %}"><p>뒤로가기</p></a>
+<a href="{% url 'articles:update' article.pk %}"><p>수정하기</p></a>
 <form action="{% url 'articles:delete' article.pk %}" method="POST" onclick="return confirm('삭제?')">
 {% csrf_token %}
 <button type="submit">삭제하기</button>

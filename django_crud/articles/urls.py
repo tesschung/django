@@ -16,7 +16,6 @@ urlpatterns = [
     path('<int:article_pk>/update/', views.update, name='update'),
     
     # 댓글 추가
-
     path('<int:article_pk>/comments', views.comments_create, name='comments_create'),
     # 댓글 삭제
     # /articles/3/comments/2/delete     article의 3번에 해당하는 comments중에 2에 해당하는 것을 삭제

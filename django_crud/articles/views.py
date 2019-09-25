@@ -35,9 +35,8 @@ def create(request):
     if request.method == 'POST':
         title = request.POST.get('title')
         content = request.POST.get('content')
-        article = Article() # 생성한 스키마의 새로운 인스턴스 생성
-        article.title = title # 정보를 할당시켜준다.
-        article.content = content
+        image = request.FILES.get('image') # image파일은 FILES 에서 get한다.
+        article = Article(title=title, content=content, image=image) # 생성한 스키마의 새로운 인스턴스 생성
         article.save() # 저장
         # redirect를 사용해서 index로 이동
         return redirect('articles:detail', article.pk)
@@ -62,7 +61,9 @@ def update(request, article_pk):
     if request.method == 'POST':
         title = request.POST.get('title')
         content = request.POST.get('content')
-
+        image = request.FILES.get('image')
+        if image:
+            article.image = image
         article.title = title # 정보를 할당시켜준다.
         article.content = content
         article.save() # 저장

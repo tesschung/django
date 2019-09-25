@@ -12,7 +12,7 @@ ARTICLES
 {% block body %}
   <h1>ARTICLES</h1>
   <!-- <a href="/articles/new/">작성하기</a> -->
-  <a href="{% url 'articles:create' %}">작성하기</a>
+  <a href="{% url 'articles:create' %}"><p>작성하기</p></a>
   <hr>
   {% for article in articles %}
 

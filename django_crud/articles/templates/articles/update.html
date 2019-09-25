@@ -7,12 +7,17 @@ update article
 {% block body %}
 <h1> update article </h1>
 
-  <form action="{% url 'articles:update' article.pk %}" method="POST">
+  <form action="{% url 'articles:update' article.pk %}" method="POST" enctype="multipart/form-data">
   {% csrf_token %}
   <input type="text" name="title" value="{{ article.title }}"><br>
   <textarea name="content" cols="30" rows="10">{{ article.content }}</textarea><br>
+  {% if article.image %}
+  <p>이전 이미지: <img src="{{ article.image.url }}" alt="{{ article.image }}"></p>
+  {% endif %}
+  <label for="image"><p>이미지:</p></label>
+  <input type="file" name="image" id="image" accept="image/*"><br> 
   <button type="submit">수정하기</button>
   </form>
 
-  <a href="{% url 'articles:index' %}">뒤로가기</a>
+  <a href="{% url 'articles:index' %}"><p>뒤로가기</p></a>
 {% endblock body %}
