@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Article, Comment
+from .models import Article, Comment, School, Student, Question, Comment_question
 
 # articles의 메인페이지고, article list를 보여준다.
 def index(request):
@@ -104,4 +104,20 @@ def comments_delete(request, article_pk ,comment_pk):
     else:
         # 해당하는 instance가 없다면, 삭제하지 않고 바로 디테일 페이지로 redirect
         return redirect('articles:detail', article_pk)
-    
+
+def create_question(request):
+    if request.method == 'POST':
+        question = request.POST.get('question')
+        question = Question(question=question) # 생성한 스키마의 새로운 인스턴스 생성
+        question.save() # 저장
+        return redirect('articles:create_question')
+
+    else: # POST로 들어온 경우가 아니면, create_question 페이지로만 접근 할 수 있도록 조정
+        questions = Question.objects.all()
+        context = {
+            'questions' : questions,
+        }
+        return render(request, 'articles/create_question.html')
+
+def comment_question(request, question_pk):
+    return render(request)

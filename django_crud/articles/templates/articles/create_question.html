@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}
+questions
+{% endblock title %}
+
+
+{% block body %}
+
+ <h1>questions</h1>
+
+  <form action="{% url 'articles:create_question' %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+  <textarea name="question" cols="30" rows="10"></textarea><br>
+  <button type="submit">생성하기</button>
+  
+  </form>
+
+<div>
+{% for question in questions %}
+<p>{{ question }}</p>
+{% endfor %}
+
+<h1>
+{{ question.title }}
+</h1>
+​
+{% for choice in choices %}
+<li>
+  <ul>{{ choice.content }} : {{ choice.votes }}표</ul>
+</li>
+{% endfor %}
+</div>
+
+{% endblock body %}
+
+
+

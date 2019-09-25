@@ -20,4 +20,8 @@ urlpatterns = [
     # 댓글 삭제
     # /articles/3/comments/2/delete     article의 3번에 해당하는 comments중에 2에 해당하는 것을 삭제
     path('<int:article_pk>/comments/<int:comment_pk>', views.comments_delete, name='comments_delete'),
+
+    # homeworkshop 20-21
+    path('create_question/', views.create_question, name='create_question'),
+    path('<int:question_pk>/comment_question', views.comment_question, name='comment_question'),
 ]

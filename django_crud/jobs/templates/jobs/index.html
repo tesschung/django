@@ -8,9 +8,13 @@ your past!
 {% block body %}
 
 <div class="mx-auto" style="width: 200px; ">
-<form action="{% url 'jobs:index' %}" method="POST">
+<form action="{% url 'jobs:index' %}" method="POST" enctype="multipart/form-data">
 {% csrf_token %}
   <input type="text" name="name" placeholder="이름입력"><br>
+
+    <label for="profile_image">이미지:</label>
+  <input type="file" name="profile_image" id="profile_image" accept="image/*"><br> 
+
   <button type="submit" class="btn btn-dark">전생보기</button>
 </form>
 </div>

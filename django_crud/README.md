@@ -716,6 +716,42 @@ multipart/form-data 인코딩하지 않고 파일 업로드시 사용
 ​
    **`detail.html`**
 ​
+   
    ```django
    <img src="{{ article.image.url }}" alt="{{ article.image }}">
    ```
+
+
+
+
+
+```
+## Jobs Application 에 Media 파일 업로드 로직 구현
+
+1. **Model**
+   - `Job` model 에  `profile_image` 이름으로 이미지 필드를 생성한다.
+   - 새롭게 수정한 모델을 데이터베이스 테이블에 반영시킨다.
+2. **Pages**
+   - 이름을 입력하는 페이지에서 사진 파일을 함께 업로드 할 수 있게 한다.
+   - 결과페이지에서 저장한 이미지를 출력하여 보여준다.
+
+3. **View**
+   - Job 데이터를 저장할 때 업로드한 사진 파일을 함께 저장한다.
+```
+
+```bash
+student@M702 MINGW64 ~/development/정승원_django_git/django/django_crud (master)
+$ pip install pilkit
+Collecting pilkit
+  Downloading https://files.pythonhosted.org/packages/c4/5c/318d9c20f309e6a79ea4d4605f86597d05f3e007d3d1925ff02474808659/pilkit-2.0.tar.gz (161kB)
+     |████████████████████████████████| 163kB 547kB/s
+Installing collected packages: pilkit
+  Running setup.py install for pilkit ... done
+Successfully installed pilkit-2.0
+(3.7.4)
+student@M702 MINGW64 ~/development/정승원_django_git/django/django_crud (master)
+$ pip install django-imagekit
+Collecting django-imagekits
+```
+
+https://stackoverflow.com/questions/26317803/field-in-model-not-recognized-for-migrations

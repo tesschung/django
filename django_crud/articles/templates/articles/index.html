@@ -18,6 +18,9 @@ ARTICLES
 
   <div>
   <!-- <a href="/articles/detail/{{ article.pk }}/"><h3> -->
+  {% if article.image %}
+  <img src="{{ article.image_thumbnail.url }}" alt="{{ article.image_thumbnail }}">
+  {% endif %}
       <a href="{% url 'articles:detail' article.pk %}"><h3>    
       {{ article.pk }}: {{ article.title }}
     </h3>

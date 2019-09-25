@@ -11,6 +11,7 @@ from bs4 import BeautifulSoup
 def index(request):
     if request.method == 'POST':
         name = request.POST.get('name')
+        profile_image = request.FILES.get('profile_image')
         if name == '': # 이름이 입력되지 않으면 결과페이지로 가지 못하도록 조정
             return render(request, 'jobs/index.html')
         else:
@@ -20,6 +21,7 @@ def index(request):
                 fake = Faker()
                 fake = Faker('ko_KR')
                 job.name = name
+                job.profile_image = profile_image
                 job.past_job = fake.job()
                 job.save()
                 return redirect('jobs:past_job', job.pk)
