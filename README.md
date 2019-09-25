@@ -5,3 +5,4 @@
 3️⃣ [django_review](https://github.com/tesschung/django/tree/master/django_review)
 :four: django_crud
 
+- django_miniproject
