@@ -755,3 +755,7 @@ Collecting django-imagekits
 ```
 
 https://stackoverflow.com/questions/26317803/field-in-model-not-recognized-for-migrations
+
+
+
+
