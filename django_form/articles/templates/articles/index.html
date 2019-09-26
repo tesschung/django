@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %} 아티클::Articles{% endblock title %}
+
+{% block body %}
+<a href="{% url 'articles:create' %}">생성</a>
+{% for article in articles %}
+<div>
+<h3>{{article.pk}}. {{ article.title }}</h3>
+<p>{{ article.created_at }}</p>
+<a href="{% url 'articles:detail' article.pk %}">상세정보</a>
+</div>
+<br>
+{% empty %}
+<p>아직 게시글이 없습니다.</p>
+{% endfor %}
+
+{% endblock body %}

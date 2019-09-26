@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}아티클 생성::Article
+{% endblock title %}
+
+
+{% block body %}
+<h1>새로운 아티클 생성</h1>
+<a href="{% url 'articles:index'%}">뒤로가기</a>
+<hr>
+{% comment %} 아무것도 적지 않으면 자기자신한테 도착 {% endcomment %}
+<form action="" method="POST">
+{% csrf_token %}
+{{ form.as_p }}
+{% comment %} <label for="title">타이틀:</label>
+<input type="text" name="title" id="title"> <br>
+
+<label for="content">내용:</label>
+<textarea name="content" id="content" cols="30" rows="10"></textarea> {% endcomment %}
+<button type="submit">생성</button>
+</form>
+
+{% endblock body %}
