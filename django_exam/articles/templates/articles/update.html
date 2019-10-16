@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Article::Update{% endblock title %}
+
+{% block body %}
+
+{% comment %} action을 비워둔다. {% endcomment %}
+<form method="POST" action=""> 
+{% csrf_token %}
+{{ form.as_p }}
+
+<button type="submit">[수정완료]</button>
+</form>
+{% endblock body %}
+
+

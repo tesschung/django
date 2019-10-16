@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Article::Detail{% endblock title %}
+
+{% block body %}
+
+{{ article.title }}
+{{ article.created_at }}
+<hr>
+{{ article.content }}
+<hr>
+<a href="{% url 'articles:update' article.pk %}">[수정하기]</a>
+
+{% comment %} 삭제 {% endcomment %}
+<form method="POST" action="{% url 'articles:delete' article.pk %}">
+{% csrf_token %}
+<button type="submit">[삭제하기]</button>
+</form>
+
+{% endblock body %}
+
