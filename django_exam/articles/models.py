@@ -1,6 +1,6 @@
 from django.db import models
-
-# Create your models here.
+# email인지 아닌지 유효성 검사
+from django.core.validators import EmailValidator, MinValueValidator
 
 class Article(models.Model):
     title = models.CharField(max_length=20)
@@ -15,4 +15,13 @@ class Article(models.Model):
         ordering = ['-pk']
 
 
+class Person(models.Model):
+    name = models.CharField(max_length=10)
+    email = models.CharField(
+    max_length=100,
+    validators=[EmailValidator(message='이메일 형식에 맞지 않습니다.')]
+    )
+    age = models.IntegerField(
+    validators=[MinValueValidator(19, message='미성년자는 노노')]
+    )
 
