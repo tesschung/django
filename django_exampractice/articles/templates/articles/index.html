@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+{% endblock title %}
+
+
+{% block body %}
+<a href="{% url 'articles:create' %}">[Write]</a>
+<div>
+{% for article in articles %}
+<h1>{{ article.pk }}. {{article.title}} </h1>
+{% comment %} for문 안에 추가하여 개별 article의 detail 페이지에 접근하도록 한다. {% endcomment %}
+<a href="{% url 'articles:detail' article.pk %}">[View detail]</a>
+<a href="{% url 'articles:delete' article.pk %}">[Delete]</a>
+{% endfor %}
+</div>
+
+{% endblock body %}

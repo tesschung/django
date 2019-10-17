@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{% endblock title %}
+
+
+{% block body %}
+<form method="POST" action="{% url 'articles:create' %}">
+{% csrf_token %}
+{{ form.as_p }}
+<button type="submit">[Complete]</button>
+</form>
+{% endblock body %}
+
+
+
+
+
+
+

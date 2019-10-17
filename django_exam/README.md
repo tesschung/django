@@ -271,6 +271,8 @@ class Article(models.Model):
         return self.content
 ```
 
+:star: article에서의 참조키 중요
+
 ```python
 class Comment(models.Model):
     # on_delete : 만약 1:n 관계에서 1이 삭제된다면 어떻게 처리할 것인지를 결정한다.
@@ -495,7 +497,7 @@ TEMPLATES = [
 
 ## 10. forms.py
 
-:star:
+:star: 
 
 ```python
 from django import forms
@@ -529,9 +531,6 @@ class ArticleForm(forms.Form):
 
 ```python
 # Meta class
-# Meta data란, 
-
-
 ```
 
 
@@ -710,6 +709,3 @@ def detail(request, article_pk):
 @require_GET
 
 @require_POST
-
-
-
