@@ -31,8 +31,11 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # Local apps
     'articles',
+    'accounts',
 
+    # Third party
     'django_extensions',
     
     'django.contrib.admin',

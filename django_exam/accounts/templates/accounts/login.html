@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{% endblock title %}
+
+
+{% block body %}
+<h2>Login</h2>
+{% comment %} http://127.0.0.1:8000/accounts/login/ {% endcomment %}
+{% comment %} action="{% url 'accounts:login' %}" {% endcomment %}
+
+<form method="POST">
+{% comment %} http://127.0.0.1:8000/accounts/login/?next=/articles/create/ {% endcomment %}
+{% comment %} 지금 내가 접속한 url로 변경 {% endcomment %}
+{% csrf_token %}
+{{ form.as_p }}
+<button type="submit">Login</button>
+</form>
+{% endblock body %}

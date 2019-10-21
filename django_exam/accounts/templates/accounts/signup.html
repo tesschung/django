@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}ACCOUNTS::SIGN-UP{% endblock title %}
+
+{% block body %}
+<h2>Sign-up</h2>
+<form action="{% url 'accounts:signup' %}" method="POST">
+{% csrf_token %}
+{% comment %} csrf_token을 넣어줌으로써 사용자가 여기서만 회원가입을 할 수 있도록 한다. {% endcomment %}
+{{ form.as_p }}
+<button type="submit">sign-up</button>
+</form>
+{% endblock body %}

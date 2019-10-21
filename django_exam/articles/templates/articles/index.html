@@ -3,7 +3,14 @@
 {% block title %}Articles::Index{% endblock title %}
 
 {% block body %} 
+
+{% if user.is_authenticated %}
 <a href="{% url 'articles:create' %}">[생성하기]</a>
+
+{% else %}
+<a href="{% url 'accounts:signup' %}">새글을 작성하시려면 회원가입을 해야합니다.</a>
+{% endif %}
+<hr>
 {% for article in articles %}
 <div>
 <h3>{{ article.pk }}. {{ article.title }}</h3><br>

@@ -9,7 +9,22 @@
 <body>
   <header>
     <h1>저희 페이지에 오신걸 환영합니다.</h1>
-    <a href="{% url 'articles:index' %}">[뒤로가기]</a>
+    {% if user.is_authenticated %}
+    
+    <p>Hello, {{ user.username }}</p>
+    <a href="{% url 'accounts:logout' %}">[Logout]</a>
+    <form action="{% url 'accounts:delete' %}" method="POST">
+	  {% csrf_token %}
+	  <button type="submit">[회원탈퇴]</button>
+    </form>
+
+    {% else %}
+    
+    <a href="{% url 'accounts:login' %}">Login</a>
+    <a href="{% url 'accounts:signup' %}">Sign-up</a>
+    
+    {% endif %}
+    <a href="{% url 'articles:index' %}">[List]</a>
   </header>
 {% block body %}{% endblock body %}
 </body>
