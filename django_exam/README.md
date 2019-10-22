@@ -709,3 +709,518 @@ def detail(request, article_pk):
 @require_GET
 
 @require_POST
+
+
+
+   ```bash
+   python manage.py startapp accounts
+   ```
+
+2.  settings.py에 등록하기
+
+   ```python
+   INSTALLED_APPS = [
+   
+       # Local apps
+       'articles',
+       'accounts',
+       # # Third party apps
+       # 'django_extensions',
+   
+       # Django apps
+       'django.contrib.admin',
+       'django.contrib.auth',
+       'django.contrib.contenttypes',
+       'django.contrib.sessions',
+       'django.contrib.messages',
+       'django.contrib.staticfiles',
+   ]
+   ```
+
+3.  review/urls.py에 accounts를 연결하는 작업
+
+   ```python
+   from django.contrib import admin
+   from django.urls import path, include
+   
+   urlpatterns = [
+       path('articles/', include('articles.urls')),
+       path('accounts/', include('accounts.urls')),  # include의 의미가 accounts 앱에 있는 urls.py의 urlpatterns를 찾으라는 뜻이므로 accounts urls.py에 해당 변수가 있어야 한다.
+       path('admin/', admin.site.urls),
+   ]
+   
+   ```
+
+4. accounts/urls.py 생성
+
+# 2. 회원가입 구현
+
+1. urls.py
+
+   ```python
+   from django.urls import path
+   from . import views
+   
+   app_name = 'accounts'
+   urlpatterns = [
+       path('signup/', views.signup, name='signup' ),
+   ]
+   
+   ```
+
+2. views.py
+
+   ```python
+   from django.shortcuts import render, redirect
+   from django.contrib.auth.forms import UserCreationForm  # django가 제공하는 로그인 관련 기능
+   # Create your views here.
+   
+   
+   
+   def signup(request):
+       if request.method == "POST":  # 포스트 요청을 받으면
+           # 회원가입 해주세요
+           form = UserCreationForm(request.POST)
+           if form.is_valid():
+               form.save()
+               return redirect('articles:index')
+           
+       else: # get요청을 받으면 
+           # 회원가입 가능한 창을 반환해 주세요
+           form = UserCreationForm()
+       context = {
+           'form' : form,
+       }
+       return render(request, 'accounts/signup.html', context)
+   ```
+
+3. tempates/accounts 생성 후 signup.html 생성
+
+   ```django
+   {% extends 'base.html' %}
+   
+   {% block title %}Accounts::Signup
+   {% endblock title %}
+   
+   {% block container %}
+   <H2>회원가입</H2>
+   {% comment %} view.signup에서  get 요청으로 이 페이지에 와있ㅎ기 때문에, 다시  form요청으로 보낼때는 action 이 필요없다.  {% endcomment %}
+   <form  method="POST"> 
+     {{ form.as_p }}
+     {% csrf_token %}
+     <input type="submit" value='회원가입'>
+   </form>
+   
+   
+   {% endblock container %}
+   ```
+
+4. 결과화면![1](C:\Users\student\Django\django_review2\images\1.JPG)
+
+5. 잘 등록 되었는지 확인하기
+
+   ```
+   python manage.py createsuperuser
+   ```
+
+   ![캡처](C:\Users\student\Django\django_review2\images\캡처.JPG)
+
+   - 파란색 동그라미가 새로 등록한 계정
+
+# 3. 로그인 구현
+
+1. urls.py
+
+   ```python
+   from django.urls import path
+   from . import views
+   
+   app_name = 'accounts'
+   urlpatterns = [
+       path('signup/', views.signup, name='signup' ),
+       path('login/', views.login, name='login'),
+   ]
+   ```
+
+   
+
+2. views.py 
+
+   - 시나리오 : 로그인 창에서 로그인을 시도하는
+
+   ```python
+   def login(request):  # 로그인은 세션 데이터를 만드는 것
+       if request.method == 'POST':
+           form = AuthenticationForm(request, request.POST)
+           if form.is_valid():
+               auth_login(request, form.get_user())  # get_user(): 사용자의 정보를 주는 함수, AuthenticationForm메소드 안에만 있는 함수
+               return redirect('articles:index')
+       else:
+           form = AuthenticationForm()
+       context = {
+           'form' : form
+       }
+       return render(request, 'accounts/login.html', context)
+   ```
+
+   - `AuthenticationForm` 만의 특이한 점 
+
+   - `form = AuthenticationForm(request, request.POST)` 두개의 인자가 필요함.
+
+   -         if form.is_valid():
+                 auth_login(request, form.get_user())
+
+   - `get_user()`: 사용자의 정보를 주는 함수, AuthenticationForm메소드 안에만 있는 함수
+
+3. login.html
+
+   ```django
+   {% extends 'base.html' %}
+   
+   {% block title %}Accounts::Login
+   {% endblock title %}
+   
+   {% block container %}
+   <h2>로그인하기</h2>
+   
+     <form method="POST">
+       {% csrf_token %}
+       {{ form.as_p }}
+       <button type="submit">로그인하기</button>
+     </form>
+     <form action=""></form>
+   {% endblock container %}
+   ```
+
+4. 문제없이 로그인 했는지 확인하기![캡처2](C:\Users\student\Django\django_review2\images\캡처2.JPG)
+
+- `sessionid`가 생성되어 있다면 정상적으로 로그인 성공했다는 뜻. `SQL EXPLORER` -> `django_seesion`을 확인해보면 다음과 같이 저장되어 있다.![캡처3](C:\Users\student\Django\django_review2\images\캡처3.JPG)
+
+5. 로그인 되어있는 상태를 사용자에게 확인해주기 위해 `base.html` 수정
+
+   ```python
+   <!DOCTYPE html>
+   <html lang="ko">
+   <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+     <title>{% block title %}{% endblock title %}</title>
+   </head>
+   <body>
+     <header>
+       <h1>저희 페이지에 오신걸 환영합니다.</h1>
+       <p>Hello, {{ user.username }}</p>
+     </header>
+     <a href="{% url 'articles:index' %}">[목록]</a>
+   <hr>
+   
+     {% block container %}{% endblock container %}
+   </body>
+   </html>
+   ```
+
+6. 결과창1.![캡처4](C:\Users\student\Django\django_review2\images\캡처4.JPG)
+
+## 4. 로그아웃
+
+1. urls.py
+
+   ```python
+   path('logout/', views.logout, name='logout'),
+   ```
+
+   
+
+1. views.py
+
+   ```python
+   from django.contrib.auth import logout as auth_logout # 로그아웃을 하기위한 로직을 임포트 한다.
+   
+   def logout(request):
+       auth_logout(request)
+       return redirect('articles:index')
+   
+   ```
+
+   ## 5. middleware(개념 정리 다시하기)
+
+   - ```python
+     # request안에 저장되어 있는 정보 확인하기
+     form Ipython import embed
+     
+     def index(request):
+         embed()
+         articles = Article.objects.all()
+         
+         return render(request, 'articles/index.html', {'articles': articles})
+     
+     ```
+```
+     
+   - ```shell
+     In [6]: dir(request.user)
+     Out[6]:
+     ['DoesNotExist',
+      'EMAIL_FIELD',
+      'Meta',
+      'MultipleObjectsReturned',
+      'REQUIRED_FIELDS',
+      'USERNAME_FIELD',
+     	......
+      'is_active',
+      'is_anonymous',
+      'is_authenticated',
+      
+     In [8]: request.user.is_anonymous
+     Out[8]: False
+     
+     In [9]: request.user.is_authenticated
+     Out[9]: True
+     
+     In [10]: request.user.username
+     Out[10]: 'dltlsgh5'
+      
+```
+
+  - 위 정보를 이용해 각 views.py 에서 랜더하는 함수들에 각 각 조건을 부여하여 다른 화면을 보여주면 로그인 유뮤에 따라 기능이 다른 웹서비스를 제공할 수 있다.
+   
+- 즉, 로그인과 로그인 하기 전의 기능을 분리하기 위해 `base.html`과 `views.py`를 수정한다.
+  
+     ```django
+     # base.html
+         {% if  user.is_authenticated  %}
+           <p>
+             <span>Hello, {{ user.username }}</span>
+             <a href="{% url 'accounts:logout' %}">[로그아웃]</a>
+           </p>
+         {% else %}
+             <a href="{% url 'accounts:login' %}">[로그인]</a>
+             <a href="{% url 'accounts:signup' %}">[회원가입]</a>
+         
+         {% endif %}
+     
+  ```
+  
+  - header 안에 다음과 같이 분리한다.
+  
+- `signup`, `login`  에  다음과 같이 분기를 만든다.
+  
+     ```python
+     def signup(request):
+         if request.user.is_authenticated:
+             return redirect('articles:index')
+     	......
+         
+     def login(request):  # 로그인은 세션 데이터를 만드는 것
+         if request.user.is_authenticated:
+             return redirect('articles:index')
+     	......
+  ```
+  
+     
+
+## 6. Actions for authenticated user
+
+- 로그인 상태인 유저만 게시글을 생성하고, 수정하고, 삭제할 수 있도록 관리한다.
+
+1. articles/index.html -> if 문으로 로그인 확인 상태 or 비로그인 상태를 파악하여 관리한다.
+
+   ```django
+   {% extends 'base.html' %}
+   
+   {% block title %} Article::Index
+   {% endblock title %}
+   
+   {% block container %}
+   
+     {% if user.is_authenticated %}
+       <h2>Article List</h2>
+       <a href="{% url 'articles:create' %}">[생성하기]</a>
+       <hr>
+     {% else %}
+       <h4>로그인 해야 게시글을 만들 수 있습니다.</h4>
+     {% endif %}
+     {% for article in articles %}
+       <div>
+         <h3>{{ article.pk }}. {{ article.title }}</h3><a href="{% url 'articles:detail' article.pk%}">[자세히보기]</a>
+       </div>
+       <br>
+     {% endfor %}
+   
+   {% endblock container %} 
+   ```
+
+2. articles/views.py
+
+   ```python
+   from django.contrib.auth.decorators import login_required
+   
+   @login_required  
+   def create(request):
+       
+       if request.method == 'POST':
+           # Article 생성 요청
+           form = ArticleForm(request.POST)  #사용자의 데이터를 가져오겠다ㅓ.
+   	......
+   ```
+
+   - `@login_required` : 로그인 상태에서만 다음의 함수를 실행할 수 있고, 로그인 상태가 아니라면 로그인 창을 불러와 로그인 하도록 유도하는 기능
+   - 만약 계정관리 앱 이름이 `accounts`가 아니라면, `@login_required(<app이름>/<로그인url>)`로 설정해야지 로그인 페이지를 불러오게 된다.
+   - 하지만 현재 로그인 view함수는 무조건 index페이지로 반환하는 로직이었다.
+
+3. accounts/views.py
+
+   ```python
+   def login(request):  # 로그인은 세션 데이터를 만드는 것
+       if request.user.is_authenticated:
+           return redirect('articles:index')
+   
+       if request.method == 'POST':
+           form = AuthenticationForm(request, request.POST)
+           if form.is_valid():
+               auth_login(request, form.get_user())  # get_user(): 사용자의 정보를 주는 함수, AuthenticationForm메소드 안에만 있는 함수
+               
+               next_page = request.GET.get('next') 
+               return redirect(next_page or 'articles:index')  
+       else:
+           form = AuthenticationForm()
+       context = {
+           'form' : form
+       }
+       return render(request, 'accounts/login.html', context)
+   
+   
+   ```
+
+   - `next_page = request.GET.get('next')` : next라는 param를 달아 로그인 페이지로 보낸다. 
+
+     ex) http://127.0.0.1:8000/accounts/login/?next=/articles/create/
+   
+   - ```python
+     if next_page: 
+     	return redirect(next_page)
+     else:
+   	 	return redirect('articles:index')
+     ```
+
+     -  url정보에 next페이지라는 애가 있으면! 넥스트페이지로 보내고, 아니면 인덱스로 보내달라는 로직
+   -  next_page = 'articles/create/' 정보가 담겨있다.
+   
+- ```python
+     return redirect(next_page or 'articles:index')
+     ```
+   
+     - 위 로직과 동일한 코드
+
+4. articles/templates/articles/detail.html
+
+   ```django
+   {% extends 'base.html' %}
+   
+   {% block title %}Article::Detail{% endblock title %}
+   
+   {% block container %}
+   
+   
+   <h2>{{ article.title }}</h2>
+   <p>{{ article.created_at }}</p>
+   <p>{{ article.content }}</p>
+   
+   {% if user.is_authenticated %}
+   
+     <a href="{% url 'articles:update' article.pk %}">[수정하기]</a>
+     <form action="{% url 'articles:delete' article.pk %}" method = 'POST'>
+       {% csrf_token %}
+       <button type="submit">삭제하기</button>  
+     </form>
+     <form action="{% url 'articles:comments_create' article.pk %}" method='POST'>
+       {% csrf_token %}
+       {{ form.as_table }}   <button type="submit">댓글작성</button>
+     </form>
+   
+   {% endif %}
+   <hr>
+   {% for comment in comments %}
+     <li> 
+     {% if user.is_authenticated %}
+       <form action="{% url 'articles:comments_delete' article.pk comment.pk %}" method="POST"> 
+         {% csrf_token %}
+         <span>{{ comment.pk }}  {{ comment }} {{ comment.created_at }}</span>
+         <button type="submit">댓글삭제</button>
+       </form>
+     {% else %}
+       <span>{{ comment.pk }}  {{ comment }} {{ comment.created_at }}</span>
+     {% endif %}
+     </li>
+   {% endfor %}
+   {% endblock container %}
+   ```
+
+   - `{% if user.is_authenticated %}` : 사용자가 인증이 되어 있으면, `{% endif %}`까지 작성되어 있는 로직을 반환하라.
+   - 로그인 하기 전 `detail`페이지 상태![캡처5](C:\Users\student\Django\django_review2\images\캡처5.JPG)
+   - 로그인 후 `detail`페이지 상태![캡처6](C:\Users\student\Django\django_review2\images\캡처6.JPG)
+
+## 7. 회원탈퇴
+
+1. urls.py
+
+   ```python
+   path('delete/', views.delete, name='delete'),
+   
+   ```
+
+2. views.py
+
+   ```python
+   from django.views.decorators.http import require_POST
+   
+   @require_POST
+   def delete(request):
+       if request.user.is_authenticated:
+           request.user.delete()
+       return redirect('articles:index')
+   ```
+
+   - `@require_POST` : 로그아웃을 하기  위한 로직을 임포트 한다.
+
+
+
+### 8. 사용자 정보 변경
+
+---
+
+
+
+흐름
+
+> UserChangeForm
+
+유저 정보 수정 changeform
+
+상속받은 changeform을 forms.py에서 커스터마이징
+
+변경된 changeform으로 views.py에 import하여 코드 수정
+
+
+
+> PasswordChangeForm
+
+비밀번호 수정 changeform은 장고가 유저정보 수정과 별개를 두어서 
+
+별개의 페이지를 제공하여
+
+로직 작성하여 페이지 제공
+
+추가로, 비밀번호 변경 이후에도 계속 로그인이 유지될 수 있도록 처리
+
+
+
+> forms.html
+
+template 통합하여 하나의 html으로 form을 전달 할 수 있도록 함
+
+
+
+## 9. 좋아요 기능
+

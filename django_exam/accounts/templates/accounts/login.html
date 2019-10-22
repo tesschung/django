@@ -14,6 +14,6 @@
 {% comment %} 지금 내가 접속한 url로 변경 {% endcomment %}
 {% csrf_token %}
 {{ form.as_p }}
-<button type="submit">Login</button>
+<button class="btn btn-primary" type="submit">Login</button>
 </form>
 {% endblock body %}

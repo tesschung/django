@@ -17,6 +17,7 @@
     
     <p>Hello, {{ user.username }}</p>
     <a href="{% url 'accounts:logout' %}">[Logout]</a>
+    <a href="{% url 'accounts:update' %}">[Edit your info]</a>
     <form action="{% url 'accounts:delete' %}" method="POST">
 	  {% csrf_token %}
 	  <button type="submit">[회원탈퇴]</button>

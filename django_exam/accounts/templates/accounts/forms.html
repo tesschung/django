@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+
+{% block title %}::Accounts::
+{% endblock title %}
+
+{% block body %}
+{% comment %} form들을 통합 {% endcomment %}
+{% comment %} 현재 url app_name을 확인 {% endcomment %}
+
+{% if request.resolver_match.url_name == 'signup'  %}
+<h2>Sign-up</h2>
+{% elif request.resolver_match.url_name == 'login'  %}
+<h2>Login</h2>
+{% elif request.resolver_match.url_name == 'update'  %}
+<h2>Edit your info</h2>
+{% elif request.resolver_match.url_name == 'password'  %}
+<h2>Change password</h2>
+{% endif %}
+
+
+<form action="POST">
+{% csrf_token %}
+{{ form.as_p }}
+<button type="submit">[Submit]</button>
+</form>
+
+
+{% endblock body %}

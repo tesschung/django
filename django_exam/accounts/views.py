@@ -1,10 +1,13 @@
 from django.shortcuts import render, redirect
 # 사용자가 입력하는 form
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm # UserChangeForm
 from django.views.decorators.http import require_GET, require_POST 
-from django.contrib.auth import login as auth_login, logout as auth_logout 
+from django.contrib.auth import login as auth_login, logout as auth_logout, update_session_auth_hash
+#  update_session_auth_hash => password 변경 후 logout되는 것 방지
 # 이름이 함수와 동일해서 모듈이 실행되지 않는 것을 방지하기 위해서 as 로 모듈 이름을 지정해준다.
 from IPython import embed
+from .forms import CustomUserChangeForm
+from django.contrib.auth.decorators import login_required
 
 def signup(request):
     if request.user.is_authenticated:
@@ -23,10 +26,9 @@ def signup(request):
     else: # == GET
         # 회원가입하는 page
         form = UserCreationForm()
-
     context = {'form': form}
     # directory
-    return render(request, 'accounts/signup.html', context)
+    return render(request, 'accounts/forms.html', context)
 
 def login(request):
     if request.user.is_authenticated:
@@ -49,7 +51,7 @@ def login(request):
     else:
         form = AuthenticationForm()
     context = {'form':form}
-    return render(request, 'accounts/login.html', context)
+    return render(request, 'accounts/forms.html', context)
 
 # login_required가 있으면 login 하자마자 logout이 되어버린다.
 def logout(request):
@@ -62,3 +64,39 @@ def delete(request):
     if request.user.is_authenticated:
         request.user.delete()
     return redirect('articles:index')
+
+
+@login_required
+def update(request):
+    if request.method == 'POST':
+        form = CustomUserChangeForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('articles:index')
+        # 수정해주세요 요청이 들어올 때
+    else:
+        # => GET 요청이 들어옴
+        # 수정할 수 있는 페이지 주세요 요청이 들어올 때
+        # 시험
+        # 아래 UserChangeForm을 CustomUserChangeForm으로 변경
+        form = CustomUserChangeForm(instance=request.user)
+    context = {'form': form}
+    return render(request, 'accounts/forms.html', context)
+
+def password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            # form을 save하면 user정보를 instance로 반환한다.
+            user = form.save()
+            # 아래와 같이 user정보를 두번째 인자로 넣는다.
+            update_session_auth_hash(request, user)
+            return redirect('accounts:update')
+
+    else:
+        # 시험
+        # user 정보를 통째로 넣음
+        form = PasswordChangeForm(request.user)
+    context = {'form': form}
+    return render(request, 'accounts/forms.html', context)
+
