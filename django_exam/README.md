@@ -894,7 +894,7 @@ def detail(request, article_pk):
 
 4. 문제없이 로그인 했는지 확인하기![캡처2](C:\Users\student\Django\django_review2\images\캡처2.JPG)
 
-- `sessionid`가 생성되어 있다면 정상적으로 로그인 성공했다는 뜻. `SQL EXPLORER` -> `django_seesion`을 확인해보면 다음과 같이 저장되어 있다.![캡처3](C:\Users\student\Django\django_review2\images\캡처3.JPG)
+- `sessionid`가 생성되어 있다면 정상적으로 로그인 성공했다는 뜻. `SQL EXPLORER` -> `django_seesion`을 확인해보면 다음과 같이 저장되어 있다.
 
 5. 로그인 되어있는 상태를 사용자에게 확인해주기 위해 `base.html` 수정
 
@@ -920,7 +920,8 @@ def detail(request, article_pk):
    </html>
    ```
 
-6. 결과창1.![캡처4](C:\Users\student\Django\django_review2\images\캡처4.JPG)
+   
+
 
 ## 4. 로그아웃
 
@@ -1158,8 +1159,8 @@ def detail(request, article_pk):
    ```
 
    - `{% if user.is_authenticated %}` : 사용자가 인증이 되어 있으면, `{% endif %}`까지 작성되어 있는 로직을 반환하라.
-   - 로그인 하기 전 `detail`페이지 상태![캡처5](C:\Users\student\Django\django_review2\images\캡처5.JPG)
-   - 로그인 후 `detail`페이지 상태![캡처6](C:\Users\student\Django\django_review2\images\캡처6.JPG)
+   - 로그인 하기 전 `detail`페이지 상태
+   - 로그인 후 `detail`페이지 상태
 
 ## 7. 회원탈퇴
 
@@ -1167,9 +1168,8 @@ def detail(request, article_pk):
 
    ```python
    path('delete/', views.delete, name='delete'),
-   
    ```
-
+   
 2. views.py
 
    ```python
@@ -1186,11 +1186,7 @@ def detail(request, article_pk):
 
 
 
-### 8. 사용자 정보 변경
-
----
-
-
+## 8. 사용자 정보 변경
 
 흐름
 
@@ -1222,5 +1218,117 @@ template 통합하여 하나의 html으로 form을 전달 할 수 있도록 함
 
 
 
-## 9. 좋아요 기능
+## 9. Article과 User간의 M:N 관계
 
+
+#### Comment 와 User 간 1:N 관계 정의
+
+```
+# Comment 와 User 간 1:N 관계 정의
+
+- Comment 모델에 user 필드를 추가하여 1:N 관계를 형성한다.
+  - 기존 생성되어있던 comment 가 있을 경우 임의의 사용자 정보로 채운다.
+  
+- View 함수에서 comment 생성 시 User 정보를 함께 저장한다.
+- Article 상세보기 화면에서 Comment 정보 표현 시 작성자 이름도 함께 보여준다.
+- Article 상세보기 화면에서 내가 작성한 Comment 라면 삭제하기 버튼을 보여준다.
+- View 함수에서 comment 를 생성한 유저와 요청을 보낸 유저가 같을 경우에만 삭제하기 기능을 수행한다.
+```
+
+
+
+누가 누구랑 매칭이 되어있는지 또다른 테이블을 생성해서 만들어줘야 한다.
+
+
+
+## 10. python manage.py shell_plus
+
+```bash
+$ python manage.py shell_plus
+
+In [3]: doctor1 = Doctor.objects.create(name='scarlet')
+
+In [4]: doctor2 = Doctor.objects.create(name='bae')
+
+In [5]: patient2 = Patient.objects.create(name='jeong', doctor=doctor2)
+
+In [6]: patient1 = Patient.objects.create(name='jason', doctor=doctor1)
+
+In [7]: Reservation.objects.create(doctor=doctor1, patient=patient1)
+Out[7]: <Reservation: jason번 환자 jason>
+
+In [8]: doctor1.reservation_set.all()
+Out[8]: <QuerySet [<Reservation: jason번 환자 jason>]>
+
+# doctor1이 환자에 대한 정보를 가지고 오려면 어떻게 해야할까?
+```
+
+
+
+models.py의 Patient에 ManyToManyField를 작성한다.
+
+```python
+class Patient(models.Model):
+    name = models.CharField(max_length=200)
+    doctors = models.ManyToManyField(Doctor, related_name="patients") # patient.doctors.all()
+    # Patient에서만 ManyToManyField가 가능하다
+
+    # doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+    def __str__(self):
+        return f'{self.name}번 환자 {self.name}'
+```
+
+```bash
+In [1]: doctor1 = Doctor.objects.create(name='jason')
+
+In [2]: patient1 = Patient.objects.create(name='john')
+
+In [3]: doctor1
+Out[3]: <Doctor: jason번 의사 jason>
+
+# doctor1에 patients를 추가하는데, patient1이다.
+In [4]: doctor1.patients.add(patient1)
+
+In [5]: doctor1.patients.all()
+Out[5]: <QuerySet [<Patient: john번 환자 john>]>
+
+In [6]: patient1.doctors.all()
+Out[6]: <QuerySet [<Doctor: jason번 의사 jason>]>
+
+# 아래도 똑같이 동작
+In [7]: patient1.doctors.add(doctor1)
+
+# doctor1에 patient1을 제외
+In [9]: patient1.doctors.remove(doctor1)
+
+In [10]: patient1.doctors.all()
+Out[10]: <QuerySet []>
+```
+
+
+
+
+
+### 프로젝트 지난주차 내일까지
+
+### 월말평가 이번주 금(코드짜기)
+
+- Django 게시글 + 댓글까지
+- 회원가입/로그인/로그아웃(회원삭제/수정x)
+- Django 좋아요 기능
+
+### 과목평가 다음주 월(객관식)
+
+- SQL + ORM
+- SQL/쿼리 마크다운, 오늘 마크다운, SQL 슬라이드
+- 디테일....
+
+
+
+### Things to read
+
+https://github.com/JaeYeopHan/Interview_Question_for_Beginner/tree/master/Python
+
+
+
+https://github.com/JaeYeopHan/Interview_Question_for_Beginner/tree/master/DataStructure

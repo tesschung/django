@@ -103,6 +103,8 @@ views에서 startings 대신 starting_members로 혹은 반대러
 # urls.py랑 views.py랑 함수 이름이 matching되는지 확인!
 ```
 
+
+
 ### 3. Admin 페이지
 
 settings.py 에서 ko-kr 바꾸려고 했는데, 이미 바뀜

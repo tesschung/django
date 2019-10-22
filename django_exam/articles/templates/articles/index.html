@@ -12,6 +12,7 @@
 {% endif %}
 <hr>
 {% for article in articles %}
+<p>작성자: {{ article.user }} </p>
 <div>
 <h3>{{ article.pk }}. {{ article.title }}</h3><br>
 <a href="{% url 'articles:detail' article.pk %}">[상세보기]</a>

@@ -4,16 +4,29 @@
 
 {% block body %}
 
-{{ article.title }}
-{{ article.created_at }}
+
+<p>작성자: {{ article.user }}</p>
+<p>제목: {{ article.title }}</p>
+<p>작성일자: {{ article.created_at }}</p>
 <hr>
+
+{% if user in article.liked_users.all %}
+<a href="{% url 'articles:like' article.pk %}" style="color: red">좋아요</a>
+{% else %}
+{% comment %} 좋아요를 누르지 않은 경우 black {% endcomment %}
+<a href="{% url 'articles:like' article.pk %}" style="color: black">좋아요</a>
+{% endif %}
+<span>{{ article.liked_users.all | length }} 명이 이 글을 좋아합니다.</span><br>
 {{ article.content }}
 <hr>
 
-{% if user.is_authenticated %}
+{% comment %} 같은 사용자인 경우에만 {% endcomment %}
+{% if article.user == request.user %} <br>
+
 <a href="{% url 'articles:update' article.pk %}">[수정하기]</a>
 {% comment %} 삭제 {% endcomment %}
-<form method="POST" action="{% url 'articles:delete' article.pk %}">
+
+<form method="POST" action="{% url 'articles:delete' article.pk %}"> 
 {% csrf_token %}
 <button type="submit">[삭제하기]</button>
 </form>
@@ -22,6 +35,33 @@
 <p>로그인 상태에서 글의 수정/삭제가 가능합니다.</p>
 
 {% endif %}
+
+
+<h3>Comments</h3>
+{% if user.is_authenticated %}
+<form action="{% url 'articles:comments_create' article.pk %}" method="post">
+  {% csrf_token %}
+  {{ comment_form.as_table }}
+  <button type="submit">작성하기</button>
+</form>
+{% endif %}
+<hr>
+<ul>
+{% for comment in comments %}
+  <li>
+  <p>작성자: {{ comment.user }} 작성일자: {{ comment.created_at }}</p>
+    {% if comment.user == request.user %}
+    <form action="{% url 'articles:comments_delete' article.pk comment.pk %}" method="post">
+      {% csrf_token %}
+      <span>{{ comment.content }} - {{ comment.created_at }}</span>
+      <button type="submit">삭제하기</button>
+    </form>
+    {% else %}
+    <span>{{ comment.content }} - {{ comment.created_at }}</span>
+    {% endif %}
+  </li>
+{% endfor %}
+</ul>
 
 
 {% endblock body %}

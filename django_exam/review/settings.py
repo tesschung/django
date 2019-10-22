@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     # Local apps
     'articles',
     'accounts',
+    'manytoone',
 
     # Third party
     'django_extensions',

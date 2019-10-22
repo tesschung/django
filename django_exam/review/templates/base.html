@@ -18,6 +18,7 @@
     <p>Hello, {{ user.username }}</p>
     <a href="{% url 'accounts:logout' %}">[Logout]</a>
     <a href="{% url 'accounts:update' %}">[Edit your info]</a>
+    <hr>
     <form action="{% url 'accounts:delete' %}" method="POST">
 	  {% csrf_token %}
 	  <button type="submit">[회원탈퇴]</button>
@@ -29,6 +30,7 @@
     <a href="{% url 'accounts:signup' %}">Sign-up</a>
     
     {% endif %}
+
     <a href="{% url 'articles:index' %}">[List]</a>
   </header>
 {% block body %}{% endblock body %}
