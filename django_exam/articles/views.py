@@ -5,6 +5,7 @@ from django.views.decorators.http import require_GET, require_POST # 새로운 �
 from IPython import embed
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from django.contrib.auth import get_user_model # 시험 외우기
 
 
 @require_GET
@@ -36,10 +37,10 @@ def create(request):
     return render(request, 'articles/create.html', context)
 
 @require_GET
-def detail(request, articles_pk):
+def detail(request, article_pk):
     # 사용자가 url에 적어보낸 article_pk를 통해 디테일 페이지를 보여준다.
     # Article.objects.get(pk=article_pk)
-    article = get_object_or_404(Article, pk=articles_pk) # 해당 article_pk를 찾는데 없으면, 사용자에게 해당 데이터가 없다고 404 status code를 제공
+    article = get_object_or_404(Article, pk=article_pk) # 해당 article_pk를 찾는데 없으면, 사용자에게 해당 데이터가 없다고 404 status code를 제공
     comments = article.comments.all()
     comment_form = CommentForm()
     context = {
@@ -51,9 +52,9 @@ def detail(request, articles_pk):
 
 # login_required는 get요청으로 이루어지는 곳에서만 사용하면 된다.
 @login_required
-def update(request, articles_pk):
+def update(request, article_pk):
 
-    article = get_object_or_404(Article, pk=articles_pk)
+    article = get_object_or_404(Article, pk=article_pk)
     # context = {'article': article}
 
     # 동일한 사용자인 경우에만 다음을 진행
@@ -65,7 +66,7 @@ def update(request, articles_pk):
             # embed() # python shell 을나가면 다시 코드 진행
             if form.is_valid():
                 form.save()
-                return redirect('articles:detail', articles_pk)
+                return redirect('articles:detail', article_pk)
         else:
             form = ArticleForm(instance=article)
 
@@ -79,9 +80,9 @@ def update(request, articles_pk):
 @require_POST
 # @login_required
 # POST이므로 사용하지 않는다.
-def delete(request, articles_pk):
+def delete(request, article_pk):
     if request.user.is_authenticated:
-        article = get_object_or_404(Article, pk=articles_pk)
+        article = get_object_or_404(Article, pk=article_pk)
         if article.user == request.user:
             article.delete()
         else:
@@ -113,13 +114,26 @@ def comments_delete(request, article_pk, comment_pk):
 
 
 
-def like(request, articles_pk):
+def like(request, article_pk):
     user = request.user
-    article = get_object_or_404(Article, pk=articles_pk)
+    article = get_object_or_404(Article, pk=article_pk)
 
+    # .exists()
     if article.liked_users.filter(pk=user.pk).exists(): # 0개가 아닌 1개라도 데이터가 존재한다면 True를 반환한다.
         user.liked_articles.remove(article)
     else:
         user.liked_articles.add(article)
 
-    return redirect('articles:detail', articles_pk)
+    return redirect('articles:detail', article_pk)
+
+
+def follow(request, article_pk, user_pk):
+    # 로그인한 유저가 게시글 유저를 Follow or Unfollow 한다.
+    user = request.user # 로그인 유저
+    person = get_object_or_404() # 게시글 주인
+
+    if user in person.followers.all():
+        person.followers.remove(user)
+    else:
+        person.followers.add(user)
+    return redirect('articles:detail', article_pk)

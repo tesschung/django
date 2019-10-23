@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect
 # 사용자가 입력하는 form
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm # UserChangeForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm # UserChangeForm, UserCreationForm
 from django.views.decorators.http import require_GET, require_POST 
 from django.contrib.auth import login as auth_login, logout as auth_logout, update_session_auth_hash
 #  update_session_auth_hash => password 변경 후 logout되는 것 방지
 # 이름이 함수와 동일해서 모듈이 실행되지 않는 것을 방지하기 위해서 as 로 모듈 이름을 지정해준다.
 from IPython import embed
-from .forms import CustomUserChangeForm
+from .forms import CustomUserChangeForm, CustomUserCreationForm
 from django.contrib.auth.decorators import login_required
 
 def signup(request):
@@ -16,7 +16,7 @@ def signup(request):
     if request.method == 'POST':
         # 회원가입 로직
         # 사용자가 POST method로 보낸 요청을 아래와 같이 담는다
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
             auth_login(request, user)
@@ -25,7 +25,7 @@ def signup(request):
         
     else: # == GET
         # 회원가입하는 page
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
     context = {'form': form}
     # directory
     return render(request, 'accounts/forms.html', context)

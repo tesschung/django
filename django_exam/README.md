@@ -1221,10 +1221,10 @@ template 통합하여 하나의 html으로 form을 전달 할 수 있도록 함
 ## 9. Article과 User간의 M:N 관계
 
 
-#### Comment 와 User 간 1:N 관계 정의
+#### Comment 와 User 간 1:N 관계 
 
 ```
-# Comment 와 User 간 1:N 관계 정의
+# Comment 와 User 간 1:N 관계
 
 - Comment 모델에 user 필드를 추가하여 1:N 관계를 형성한다.
   - 기존 생성되어있던 comment 가 있을 경우 임의의 사용자 정보로 채운다.
@@ -1235,9 +1235,40 @@ template 통합하여 하나의 html으로 form을 전달 할 수 있도록 함
 - View 함수에서 comment 를 생성한 유저와 요청을 보낸 유저가 같을 경우에만 삭제하기 기능을 수행한다.
 ```
 
+ 한 유저가 작성한 댓글은 해당 유저에게만 속해있다.
 
+
+
+
+
+#### User과 User간의 M:N 관계 
 
 누가 누구랑 매칭이 되어있는지 또다른 테이블을 생성해서 만들어줘야 한다.
+
+수강신청과 같다.
+
+한 사람이 한 과목을 수강신청했다고 다른사람이 수강신청을 하지못하는 것은 아니다.
+
+그래서 중개테이블을 이용하기로함
+
+
+
+db / migrations를 모두 지운 상태에서 시작해야 한다.
+
+
+
+
+
+#### AbstractBaseUser vs AbstractUser 비교
+
+https://whatisthenext.tistory.com/128
+
+
+
+django의 user model은 AbstractBaseUser와 AbstractUser를 상속받을 수 있다.
+
+- 중계 모델은 doctor.reservation_set.all()과 같이 reservation이라는 중간 과정을 거쳐야 하는 점이 불편하다.
+- ManyToMany는 doctor.patients.all()처럼 직접 접근할 수 있어서 편리
 
 
 
@@ -1313,9 +1344,12 @@ Out[10]: <QuerySet []>
 
 ### 월말평가 이번주 금(코드짜기)
 
-- Django 게시글 + 댓글까지
-- 회원가입/로그인/로그아웃(회원삭제/수정x)
-- Django 좋아요 기능
+- Django 게시글 + 댓글까지만 (미디어파일 사진파일 업로드는x)
+- auth 관련 회원가입/로그인/로그아웃(회원삭제/수정/변경x)
+  - 장고 프로젝트를 전달받고, 명세서에 맞게 작성
+- Django 좋아요  M:N관계 기능
+- 기능 구현해보면서 공부하는것이 중요
+- follow 구현
 
 ### 과목평가 다음주 월(객관식)
 
