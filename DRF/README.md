@@ -216,3 +216,18 @@ $ pip install drf-yasg
 
 
 https://swagger.io/
+
+
+
+### PUT Methods
+
+![PUT](images/PUT.JPG)
+
+
+
+위 창에 
+
+{ "변수명": "수정내용"}
+
+을 한 후 PUT 요청으로 send하면 아래 Body창에 변경된 결과가 출력된다.
+
