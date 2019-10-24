@@ -17,10 +17,11 @@ class ArtistDetailSerializer(ArtistSerializer):
     # 중요
     # MusicSerializers로 serializing을 해서 보내준다.
     musics = MusicSerializer(many=True)
-    # Json형태로 만들어주기르웅 요청
+    musics_count = serializers.IntegerField(source='musics.count')
+    # Json형태로 만들어주도록 요청
     class Meta(ArtistSerializer.Meta):
         # ArtistSerializer.Meta.fields 이부분도 tuple이여야 한다.
-        fields = ArtistSerializer.Meta.fields + ('musics',)
+        fields = ArtistSerializer.Meta.fields + ('musics', 'musics_count')
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:

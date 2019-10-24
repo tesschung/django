@@ -7,7 +7,21 @@ from rest_framework import serializers
 
 @api_view(['GET'])
 def music_list(request):
-    musics = Music.objects.all()
+    # 만약에 artist_pk가 넘어온다면, artist_pk로 필터링한 값만 응답한다.
+    # 그렇지 않다면 전체 음악을 응답한다.
+
+    # 1. params dict 생성
+    params = {}
+    # 2. artist_pk 값을 가져오는데,
+    artist_pk = request.GET.get('artist_pk')
+
+    # 3. artist_pk 가 None이 아니라면,
+    if artist_pk is not None:
+        # artist_id라는 곳에 artist_pk를 넣는다.
+        params['artist_id'] = artist_pk
+
+    # 4. dict에 있는 모든 값을 넣겠도록 **params 처리
+    musics = Music.objects.filter(**params)
     serializer = MusicSerializer(musics, many=True)
     return Response(serializer.data)
 

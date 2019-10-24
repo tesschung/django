@@ -231,3 +231,30 @@ https://swagger.io/
 
 을 한 후 PUT 요청으로 send하면 아래 Body창에 변경된 결과가 출력된다.
 
+
+
+
+
+
+
+---
+
+http://127.0.0.1:8000/api/v1/musics/?artist_pk=1
+
+
+
+127.0.0.1:8000/api/v1/musics/?artist_pk=1
+
+
+
+**127.0.0.1:8000**
+
+Domian
+
+**/api/v1/musics/**
+
+Endpoint
+
+**?artist_pk=1**
+
+Query Parameters
