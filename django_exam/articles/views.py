@@ -137,3 +137,5 @@ def follow(request, article_pk, user_pk):
     else:
         person.followers.add(user)
     return redirect('articles:detail', article_pk)
+
+
