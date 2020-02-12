@@ -27,9 +27,10 @@ MTV
 
 **T** : template 사용자가 보는 화면
 
-**V** : view 중간 관리자
+**V** : view(===controller) 중간 관리자
 
-
+장고의 개발 방식은 MTV(Model, Template, View) 패턴을 따르며, 기본적으로 MVC와 많이 유사하다.
+ 데이터를 Model, view를 Template, controllerl는 View라고 표현하여 MTV(model-template-view)패턴 이라고 한다. 모델(Model)은 데이터베이스에 저장되는 데이터를 의미하고, 템플릿(Template)은 사용자에게 보여지는 부분을, 뷰(View)는 실질적으로 프로그램 로직이 동작하여 데이터를 가져오고 적절하게 가공하여 그 결과를 템플릿에 전달하는 역할을 수행
 
 ### Django Setting
 
@@ -175,7 +176,7 @@ $ python manage.py runserver
 - Django project name
   - `-` 캐릭터는 사용될 수 없다.
   - python과 django에서 이미 사용되는 이름은 사용하지 않는다.
-    - django 라는 이름은 django 그 자체와 충동하며, test라는 이름은 django 내부, 자체적으로 사용하는 이름
+    - django 라는 이름은 django 그 자체와 충돌하고, test라는 이름은 django 내부, 자체적으로 사용하는 이름이다.
 
 #### Run server
 
